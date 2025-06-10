@@ -123,7 +123,7 @@ const UploadPage = () => {
               UPLOAD VIDEO
             </h1>
             <p className="text-brutal-gray font-bold uppercase tracking-wide dark:text-gray-400">
-              SHARE YOUR RAW CONTENT WITH THE WORLD
+              SHARE YOUR VIDEO WITH DOODLETOWN
             </p>
           </div>
         </div>

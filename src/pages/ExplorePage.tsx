@@ -119,7 +119,7 @@ const ExplorePage = () => {
                 ? `VIDEOS TAGGED WITH #${selectedHashtag.toUpperCase()}`
                 : location.pathname === '/search' 
                   ? 'FIND WHAT YOU\'RE LOOKING FOR' 
-                  : 'DISCOVER RAW CONTENT'
+                  : 'DISCOVER THE GREATEST OF DOODLETOWN'
               }
             </p>
           </div>

@@ -16,22 +16,22 @@ const HomePage = () => {
   return (
     <div className="space-y-16">
       {/* Hero Section */}
-      <section className="relative bg-primary-400 border-4 border-brutal-black shadow-brutal-lg p-8 md:p-12 dark:border-brutal-dark-brown dark:shadow-brutal-dark-lg">
+      <section className="relative bg-primary-600 border-4 border-brutal-black shadow-brutal-lg p-8 md:p-12 dark:border-brutal-dark-brown dark:shadow-brutal-dark-lg">
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-3 bg-white border-3 border-brutal-black px-6 py-3 mb-8 shadow-brutal dark:border-brutal-dark-brown dark:shadow-brutal-dark">
             <Square size={16} className="text-brutal-black" fill="currentColor" />
-            <span className="font-mono font-bold uppercase tracking-wide text-brutal-black">RAW VIDEO SHARING</span>
+            <span className="font-mono font-bold uppercase tracking-wide text-brutal-black">YIKES AND DESCRIBE</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight text-brutal-black font-mono uppercase">
-            SHARE YOUR
-            <span className="block text-secondary-700 mt-2">
-              RAW VIDEOS
+            <span className="text-brutal-black">DOODLETOWN'S #1</span>
+            <span className="block text-white mt-2">
+              LEADING WEBTUBE
             </span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed text-brutal-black font-bold">
-            NO FILTERS. NO FLUFF. JUST PURE, UNCUT VIDEO CONTENT FROM REAL CREATORS.
+            DELI-KUN'S PREMIERE STREAMING AND VIDEO SHARING SERVICE.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -100,59 +100,15 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-secondary-400 border-4 border-brutal-black shadow-brutal-lg dark:border-brutal-dark-brown dark:shadow-brutal-dark-lg">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-black text-brutal-black mb-4 font-mono uppercase">
-            WHY DELITUBE?
-          </h2>
-          <p className="text-brutal-black font-bold uppercase tracking-wide text-lg">
-            RAW. REAL. UNFILTERED.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-8">
-          <div className="card-brutal p-8 text-center brutal-hover">
-            <div className="w-20 h-20 bg-success-600 border-3 border-brutal-black flex items-center justify-center mx-auto mb-6 dark:border-brutal-dark-brown">
-              <Shield size={32} className="text-white" />
-            </div>
-            <h3 className="text-xl font-black text-brutal-black mb-3 font-mono uppercase">SECURE</h3>
-            <p className="text-brutal-black font-bold leading-relaxed">
-              YOUR CONTENT IS PROTECTED WITH MILITARY-GRADE SECURITY. NO COMPROMISES.
-            </p>
-          </div>
-
-          <div className="card-brutal p-8 text-center brutal-hover">
-            <div className="w-20 h-20 bg-warning-500 border-3 border-brutal-black flex items-center justify-center mx-auto mb-6 dark:border-brutal-dark-brown">
-              <Zap size={32} className="text-white" />
-            </div>
-            <h3 className="text-xl font-black text-brutal-black mb-3 font-mono uppercase">FAST</h3>
-            <p className="text-brutal-black font-bold leading-relaxed">
-              LIGHTNING-FAST UPLOADS AND STREAMING. NO WAITING. NO BUFFERING.
-            </p>
-          </div>
-
-          <div className="card-brutal p-8 text-center brutal-hover">
-            <div className="w-20 h-20 bg-accent-600 border-3 border-brutal-black flex items-center justify-center mx-auto mb-6 dark:border-brutal-dark-brown">
-              <Users size={32} className="text-white" />
-            </div>
-            <h3 className="text-xl font-black text-brutal-black mb-3 font-mono uppercase">COMMUNITY</h3>
-            <p className="text-brutal-black font-bold leading-relaxed">
-              CONNECT WITH REAL CREATORS. NO FAKE ENGAGEMENT. JUST AUTHENTIC CONTENT.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       {!user && (
         <section className="text-center py-16 bg-brutal-black border-4 border-primary-400 shadow-brutal-orange-lg dark:bg-brutal-dark-brown dark:border-primary-500">
           <div className="max-w-3xl mx-auto px-8">
             <h2 className="text-3xl md:text-4xl font-black mb-6 text-white font-mono uppercase">
-              READY TO GO RAW?
+              READY TO JOIN DOODLETOWN?
             </h2>
             <p className="text-xl mb-8 text-white font-bold leading-relaxed">
-              CREATE YOUR ACCOUNT AND START SHARING UNFILTERED VIDEO CONTENT TODAY.
+              CREATE YOUR ACCOUNT AND START SHARING VIDEO CONTENT TODAY.
               NO BULLSHIT. NO FAKE PROMISES. JUST REAL VIDEO SHARING.
             </p>
             <Link
