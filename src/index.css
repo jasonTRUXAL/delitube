@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased font-sans;
+  }
+  
+  /* Custom scrollbar - brutal style */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-brutal-white border-2 border-brutal-black;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply dark:bg-brutal-dark-brown dark:border-brutal-black;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-400 border-2 border-brutal-black dark:bg-primary-500 dark:border-brutal-black;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-500 dark:bg-primary-600;
+  }
+}
+
+@layer utilities {
+  /* Custom background utilities */
+  .bg-main {
+    background-color: #f9fbf5;
+  }
+  
+  .bg-dark-main {
+    background-color: #2d1b1a;
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  /* Brutal hover effects */
+  .brutal-hover {
+    transition: all 0.1s ease-out;
+  }
+  
+  .brutal-hover:hover {
+    transform: translate(-2px, -2px);
+  }
+  
+  .brutal-hover:active {
+    transform: translate(0px, 0px);
+  }
+  
+  /* Text selection */
+  ::selection {
+    @apply bg-primary-400 text-brutal-black;
+  }
+  
+  ::-moz-selection {
+    @apply bg-primary-400 text-brutal-black;
+  }
+}
+
+/* Brutal focus styles */
+@layer components {
+  .focus-brutal {
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-brutal-cream dark:focus:ring-offset-brutal-dark-brown;
+  }
+  
+  .btn-brutal {
+    background-color: #b4dded;
+    @apply text-brutal-black border-3 border-brutal-black shadow-brutal font-bold uppercase tracking-wide brutal-hover focus-brutal dark:shadow-brutal-dark;
+  }
+  
+  .btn-brutal-secondary {
+    @apply bg-white text-brutal-black border-3 border-brutal-black shadow-brutal font-bold uppercase tracking-wide brutal-hover focus-brutal dark:bg-brutal-dark-brown dark:text-white dark:shadow-brutal-dark;
+  }
+  
+  .btn-brutal-primary {
+    @apply bg-primary-400 text-brutal-black border-3 border-brutal-black shadow-brutal font-bold uppercase tracking-wide brutal-hover focus-brutal dark:shadow-brutal-dark;
+  }
+  
+  .btn-brutal-warning {
+    @apply bg-warning-500 text-white border-3 border-brutal-black shadow-brutal font-bold uppercase tracking-wide brutal-hover focus-brutal dark:shadow-brutal-dark;
+  }
+  
+  .card-brutal {
+    @apply bg-white border-3 border-brutal-black shadow-brutal dark:bg-brutal-dark-brown dark:shadow-brutal-dark;
+  }
+  
+  .input-brutal {
+    @apply bg-white border-3 border-brutal-black focus:border-primary-400 focus-brutal font-mono dark:bg-brutal-dark-brown dark:text-white dark:focus:border-primary-500;
+  }
+}
