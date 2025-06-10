@@ -31,7 +31,7 @@ const HomePage = () => {
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed text-brutal-black font-bold">
-            DELI-KUN'S PREMIERE STREAMING AND VIDEO SHARING SERVICE.
+            DELI-KUN'S PREMIERE STREAMING AND VIDEO SHARING SERVICE, RATED BEST ONLY OPTION ANNUALLY!
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
