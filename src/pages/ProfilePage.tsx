@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Camera, Square, Trash2, LogOut, Mail, Lock } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { supabase } from '../lib/supabase';
-import UserDeletionModal from '../components/UserDeletionModal';
+import UserDeletionModal from '../components/modals/UserDeletionModal';
+import { API_ENDPOINTS } from '../utils/constants';
 
 const ProfilePage = () => {
   const { user, updateProfile, signOut } = useAuthStore();
@@ -115,7 +116,7 @@ const ProfilePage = () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-notification-email`, {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session?.access_token}`,
@@ -194,7 +195,7 @@ const ProfilePage = () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-notification-email`, {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session?.access_token}`,
@@ -222,7 +223,7 @@ const ProfilePage = () => {
         throw new Error('No active session');
       }
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`, {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.deleteUser}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,

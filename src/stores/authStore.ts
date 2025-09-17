@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase, User } from '../lib/supabase';
+import { API_ENDPOINTS } from '../utils/constants';
 import { toast } from 'sonner';
 
 type AuthState = {
@@ -49,7 +50,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         
         // Send welcome email notification (no auth required for welcome emails)
         try {
-          await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-notification-email`, {
+          await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       
       // Send notification email about password reset (no auth required)
       try {
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-notification-email`, {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +194,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-notification-email`, {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session?.access_token}`,

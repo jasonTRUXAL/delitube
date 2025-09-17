@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase, User } from '../lib/supabase';
+import { API_ENDPOINTS } from '../utils/constants';
 import { toast } from 'sonner';
 
 type AdminState = {
@@ -141,7 +142,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
       }
 
       // Call the edge function to delete the user
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-user`, {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.deleteUser}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,
