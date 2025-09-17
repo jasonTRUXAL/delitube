@@ -4,15 +4,22 @@ import { Search, Upload, User, Menu, X, Moon, Sun, LogOut, Play } from 'lucide-r
 import { useAuthStore } from '../stores/authStore';
 import { useVideoStore } from '../stores/videoStore';
 import ThemeToggle from './ThemeToggle';
+import { generateRandomTagline } from '../utils/slogans';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [tagline, setTagline] = useState('');
   const { user, signOut } = useAuthStore();
   const { searchVideos, setSearchQuery, clearSearch, searchQuery } = useVideoStore();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Generate random tagline on component mount
+  useEffect(() => {
+    setTagline(generateRandomTagline());
+  }, []);
 
   // Update local search input when searchQuery changes
   useEffect(() => {

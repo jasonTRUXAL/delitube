@@ -4,10 +4,20 @@ import { Link } from 'react-router-dom';
 import VideoGrid from '../components/VideoGrid';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
+import { generateRandomTagline, generateRandomHeroText } from '../utils/slogans';
 
 const HomePage = () => {
   const { recentVideos, loading, fetchRecentVideos } = useVideoStore();
   const { user } = useAuthStore();
+  
+  // Generate random text on component mount
+  const [tagline, setTagline] = React.useState('');
+  const [heroText, setHeroText] = React.useState({ number: '#1', leading: 'Leading' });
+  
+  React.useEffect(() => {
+    setTagline(generateRandomTagline());
+    setHeroText(generateRandomHeroText());
+  }, []);
 
   useEffect(() => {
     fetchRecentVideos(8);
@@ -20,13 +30,13 @@ const HomePage = () => {
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-3 bg-white border-3 border-brutal-black px-6 py-3 mb-8 shadow-brutal dark:border-brutal-dark-brown dark:shadow-brutal-dark">
             <Square size={16} className="text-brutal-black" fill="currentColor" />
-            <span className="font-mono font-bold uppercase tracking-wide text-brutal-black">YIKES AND DESCRIBE</span>
+            <span className="font-mono font-bold uppercase tracking-wide text-brutal-black">{tagline.toUpperCase()}</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight text-brutal-black font-mono uppercase">
-            <span className="text-brutal-black">DOODLETOWN'S #1</span>
+            <span className="text-brutal-black">DOODLETOWN'S {heroText.number}</span>
             <span className="block text-white mt-2">
-              LEADING WEBTUBE
+              {heroText.leading.toUpperCase()} WEBTUBE
             </span>
           </h1>
           
