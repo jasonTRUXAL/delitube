@@ -1,31 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ExternalLink, Play, Clock, Square } from 'lucide-react';
-
-interface TwitchClip {
-  id: string;
-  url: string;
-  embed_url: string;
-  broadcaster_id: string;
-  broadcaster_name: string;
-  creator_id: string;
-  creator_name: string;
-  video_id: string;
-  game_id: string;
-  language: string;
-  title: string;
-  view_count: number;
-  created_at: string;
-  thumbnail_url: string;
-  duration: number;
-  vod_offset: number;
-}
-
-interface TwitchClipsResponse {
-  data: TwitchClip[];
-  pagination?: {
-    cursor?: string;
-  };
-}
+import { twitchApi, TwitchClip } from '../lib/twitchApi';
 
 const TwitchClips = () => {
   const [clips, setClips] = useState<TwitchClip[]>([]);
@@ -181,16 +156,29 @@ const TwitchClips = () => {
   ];
 
   useEffect(() => {
-    // Simulate API loading
     const loadClips = async () => {
       setLoading(true);
       try {
-        // In a real implementation, you would fetch from Twitch API here
-        // For now, we'll use mock data
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate loading
-        setClips(mockClips);
+        if (twitchApi.isConfigured()) {
+          console.log('Fetching real Twitch clips...');
+          const realClips = await twitchApi.getClipsByUsername('julieee22', 8);
+          
+          if (realClips.length > 0) {
+            setClips(realClips);
+          } else {
+            console.log('No clips found, using mock data');
+            setClips(mockClips);
+          }
+        } else {
+          console.log('Twitch API not configured, using mock data');
+          // Simulate loading delay for mock data
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setClips(mockClips);
+        }
       } catch (err) {
-        setError('Failed to load Twitch clips');
+        console.error('Error loading Twitch clips:', err);
+        console.log('Falling back to mock data');
+        setClips(mockClips);
       } finally {
         setLoading(false);
       }
