@@ -4,7 +4,8 @@ import { Trash2, Shield, ShieldOff, Users, Film, MessageSquare, Home, Square, Ch
 import { useAdminStore } from '../stores/adminStore';
 import { useAuthStore } from '../stores/authStore';
 import { useVideoStore } from '../stores/videoStore';
-import UserDeletionModal from '../components/UserDeletionModal';
+import UserDeletionModal from '../components/modals/UserDeletionModal';
+import { formatDate } from '../utils/formatters';
 
 const AdminPage = () => {
   const { user } = useAuthStore();
@@ -155,16 +156,6 @@ const AdminPage = () => {
 
   const pageNumbers = getPageNumbers();
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).toUpperCase();
-  };
-  
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}

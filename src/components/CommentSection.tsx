@@ -4,6 +4,7 @@ import { Send, Trash2, Square } from 'lucide-react';
 import { useCommentStore } from '../stores/commentStore';
 import { useAuthStore } from '../stores/authStore';
 import { Comment } from '../lib/supabase';
+import { formatDate } from '../utils/formatters';
 
 type CommentSectionProps = {
   videoId: string;
@@ -29,17 +30,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ videoId }) => {
     } catch (error) {
       console.error('Failed to add comment', error);
     }
-  };
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).toUpperCase();
   };
   
   const canDeleteComment = (comment: Comment) => {

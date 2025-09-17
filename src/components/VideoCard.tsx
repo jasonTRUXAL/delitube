@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, ThumbsUp, Clock, Square, Hash } from 'lucide-react';
 import { Video } from '../lib/supabase';
+import { formatRelativeTime } from '../utils/formatters';
 
 type VideoCardProps = {
   video: Video;
@@ -9,20 +10,6 @@ type VideoCardProps = {
 };
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, className = '' }) => {
-  // Format date to relative time (e.g., "2 days ago")
-  const formatRelativeTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return 'NOW';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}M AGO`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}H AGO`;
-    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}D AGO`;
-    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)}MO AGO`;
-    return `${Math.floor(diffInSeconds / 31536000)}Y AGO`;
-  };
-
   return (
     <Link
       to={`/video/${video.id}`}

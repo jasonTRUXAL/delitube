@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { supabase, Video } from '../lib/supabase';
 import { useHashtagStore } from './hashtagStore';
+import { STORAGE_KEYS } from '../utils/constants';
 import { toast } from 'sonner';
 
 type VideoState = {
@@ -622,10 +623,10 @@ export const useVideoStore = create<VideoState>((set, get) => ({
       
       // Store the like in localStorage
       try {
-        const likedVideos = JSON.parse(localStorage.getItem('likedVideos') || '[]');
+        const likedVideos = JSON.parse(localStorage.getItem(STORAGE_KEYS.likedVideos) || '[]');
         if (Array.isArray(likedVideos)) {
           likedVideos.push(videoId);
-          localStorage.setItem('likedVideos', JSON.stringify(likedVideos));
+          localStorage.setItem(STORAGE_KEYS.likedVideos, JSON.stringify(likedVideos));
         }
       } catch (storageError) {
         console.warn('Failed to update liked videos in localStorage:', storageError);
@@ -647,7 +648,7 @@ export const useVideoStore = create<VideoState>((set, get) => ({
 
   hasLikedVideo: (videoId) => {
     try {
-      const likedVideos = JSON.parse(localStorage.getItem('likedVideos') || '[]');
+      const likedVideos = JSON.parse(localStorage.getItem(STORAGE_KEYS.likedVideos) || '[]');
       return Array.isArray(likedVideos) && likedVideos.includes(videoId);
     } catch (error) {
       console.warn('Failed to check liked videos:', error);
