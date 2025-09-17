@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import VideoGrid from '../components/VideoGrid';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
-import TwitchClips from '../components/TwitchClips';
 
 const HomePage = () => {
   const { recentVideos, loading, fetchRecentVideos } = useVideoStore();
@@ -99,31 +98,6 @@ const HomePage = () => {
             emptyMessage="NO VIDEOS YET. BE THE FIRST TO UPLOAD!"
           />
         )}
-      </section>
-
-      {/* Twitch Clips Section */}
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-black text-brutal-black dark:text-white mb-2 font-mono uppercase">
-              RECENT TWITCH CLIPS
-            </h2>
-            <p className="text-brutal-gray dark:text-gray-400 font-bold uppercase tracking-wide">
-              LATEST HIGHLIGHTS FROM JULIEEE22'S STREAM
-            </p>
-          </div>
-          <a
-            href="https://twitch.tv/julieee22"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-brutal-secondary px-6 py-3"
-          >
-            VISIT STREAM
-            <ArrowRight size={16} className="inline ml-2" />
-          </a>
-        </div>
-
-        <TwitchClips />
       </section>
 
       {/* CTA Section */}
