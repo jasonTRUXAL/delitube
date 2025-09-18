@@ -46,16 +46,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto card-brutal p-8">
+    <div className="w-full max-w-md mx-auto card-brutal p-4 sm:p-6 lg:p-8">
       {/* Header with brutal icon */}
-      <div className="text-center mb-8">
-        <div className="w-16 h-16 bg-primary-600 border-3 border-brutal-black flex items-center justify-center mx-auto mb-4">
-          <Square size={24} className="text-white" fill="currentColor" />
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary-600 border-3 border-brutal-black flex items-center justify-center mx-auto mb-4">
+          <Square size={16} className="sm:w-6 sm:h-6 text-white" fill="currentColor" />
         </div>
-        <h2 className="text-2xl font-black text-brutal-black font-mono uppercase">
+        <h2 className="text-xl sm:text-2xl font-black text-brutal-black font-mono uppercase dark:text-white">
           {type === 'login' ? 'LOGIN TO DELITUBE' : 'JOIN DELITUBE'}
         </h2>
-        <p className="text-brutal-gray font-bold uppercase tracking-wide mt-2">
+        <p className="text-brutal-gray font-bold uppercase tracking-wide mt-2 text-sm sm:text-base dark:text-gray-400">
           {type === 'login' 
             ? 'ACCESS YOUR ACCOUNT' 
             : 'CREATE YOUR ACCOUNT'
@@ -64,7 +64,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-accent-500 border-3 border-brutal-black text-white font-mono font-bold text-sm">
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-accent-500 border-3 border-brutal-black text-white font-mono font-bold text-xs sm:text-sm">
           {error}
         </div>
       )}
@@ -72,7 +72,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {type === 'register' && (
           <div>
-            <label htmlFor="username\" className="block text-sm font-black text-brutal-black mb-2 font-mono uppercase">
+            <label htmlFor="username" className="block text-xs sm:text-sm font-black text-brutal-black mb-2 font-mono uppercase dark:text-white">
               USERNAME
             </label>
             <input
@@ -82,14 +82,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
               required
               value={formData.username}
               onChange={handleChange}
-              className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray"
+              className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"
               placeholder="YOUR USERNAME"
             />
           </div>
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm font-black text-brutal-black mb-2 font-mono uppercase">
+          <label htmlFor="email" className="block text-xs sm:text-sm font-black text-brutal-black mb-2 font-mono uppercase dark:text-white">
             EMAIL
           </label>
           <input
@@ -99,13 +99,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
             required
             value={formData.email}
             onChange={handleChange}
-            className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray"
+            className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"
             placeholder="YOUR@EMAIL.COM"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-black text-brutal-black mb-2 font-mono uppercase">
+          <label htmlFor="password" className="block text-xs sm:text-sm font-black text-brutal-black mb-2 font-mono uppercase dark:text-white">
             PASSWORD
           </label>
           <div className="relative">
@@ -116,16 +116,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
               required
               value={formData.password}
               onChange={handleChange}
-              className="input-brutal w-full px-4 py-3 pr-12 font-mono placeholder:text-brutal-gray"
+              className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 pr-10 sm:pr-12 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
               placeholder="••••••••"
               minLength={6}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-brutal-gray hover:text-brutal-black transition-colors"
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-brutal-gray hover:text-brutal-black transition-colors dark:hover:text-white"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? <EyeOff size={16} className="sm:w-5 sm:h-5" /> : <Eye size={16} className="sm:w-5 sm:h-5" />}
             </button>
           </div>
         </div>
@@ -133,11 +133,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
         <button
           type="submit"
           disabled={loading}
-          className="btn-brutal w-full py-3 text-lg"
+          className="btn-brutal w-full py-2 sm:py-3 text-sm sm:text-base lg:text-lg"
         >
           {loading ? (
             <span className="flex items-center justify-center">
-              <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin mr-3"></div>
+              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent animate-spin mr-2 sm:mr-3"></div>
               {type === 'login' ? 'LOGGING IN...' : 'CREATING...'}
             </span>
           ) : (
@@ -146,18 +146,18 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      <div className="mt-4 sm:mt-6 text-center">
         {type === 'login' ? (
-          <p className="text-brutal-gray font-bold">
+          <p className="text-brutal-gray font-bold text-sm sm:text-base dark:text-gray-400">
             NEW TO DELITUBE?{' '}
-            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-black transition-colors font-mono uppercase">
+            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-black transition-colors font-mono uppercase dark:text-primary-400">
               JOIN NOW
             </Link>
           </p>
         ) : (
-          <p className="text-brutal-gray font-bold">
+          <p className="text-brutal-gray font-bold text-sm sm:text-base dark:text-gray-400">
             ALREADY HAVE ACCOUNT?{' '}
-            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-black transition-colors font-mono uppercase">
+            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-black transition-colors font-mono uppercase dark:text-primary-400">
               LOGIN
             </Link>
           </p>

@@ -83,7 +83,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-4">
+          <nav className="hidden lg:flex items-center space-x-4">
             <Link 
               to="/" 
               className="text-white hover:text-orange-400 font-bold uppercase tracking-wide px-4 py-2 border-2 border-transparent hover:border-white transition-all duration-100"
@@ -173,7 +173,7 @@ const Navbar = () => {
           </nav>
 
           {/* Mobile menu button */}
-          <div className="flex items-center space-x-4 md:hidden">
+          <div className="flex items-center space-x-2 lg:hidden">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -200,7 +200,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Menu */}
         {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-16 bg-main z-40 border-t-4 border-brutal-black dark:bg-dark-main dark:border-brutal-dark-brown">
+          <div className="lg:hidden fixed inset-0 top-16 bg-main z-40 border-t-4 border-brutal-black dark:bg-dark-main dark:border-brutal-dark-brown">
             <nav className="h-full overflow-y-auto px-4 py-4">
               <div className="flex flex-col space-y-4">
                 <Link 
@@ -229,7 +229,7 @@ const Navbar = () => {
                   <>
                     <Link 
                       to="/upload" 
-                      className="btn-brutal px-4 py-3"
+                      className="btn-brutal px-4 py-3 text-center"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Upload size={18} className="inline mr-2" />
@@ -245,7 +245,7 @@ const Navbar = () => {
                     </Link>
                     <Link 
                       to="/my-videos" 
-                      className="text-brutal-black hover:text-primary-600 font-bold uppercase tracking-wide px-6 py-2 border-2 border-transparent hover:border-brutal-black transition-all duration-100 dark:text-white dark:hover:border-brutal-dark-brown"
+                      className="text-brutal-black hover:text-primary-600 font-bold uppercase tracking-wide px-4 py-3 border-2 border-transparent hover:border-brutal-black transition-all duration-100 dark:text-white dark:hover:border-brutal-dark-brown"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       MY VIDEOS
@@ -253,7 +253,7 @@ const Navbar = () => {
                     {user.is_admin && (
                       <Link 
                         to="/admin" 
-                        className="text-brutal-black hover:text-primary-600 font-bold uppercase tracking-wide px-6 py-2 border-2 border-transparent hover:border-brutal-black transition-all duration-100 dark:text-white dark:hover:border-brutal-dark-brown"
+                        className="text-brutal-black hover:text-primary-600 font-bold uppercase tracking-wide px-4 py-3 border-2 border-transparent hover:border-brutal-black transition-all duration-100 dark:text-white dark:hover:border-brutal-dark-brown"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         ADMIN PANEL
@@ -274,7 +274,7 @@ const Navbar = () => {
                   <div className="flex flex-col space-y-3">
                     <Link 
                       to="/login" 
-                      className="text-brutal-black hover:text-primary-600 font-bold uppercase tracking-wide px-4 py-3 border-2 border-transparent hover:border-brutal-black transition-all duration-100 text-center dark:text-white dark:hover:border-brutal-dark-brown"
+                      className="btn-brutal-secondary px-4 py-3 text-center"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       LOGIN
@@ -295,21 +295,21 @@ const Navbar = () => {
 
         {/* Search bar */}
         {isSearchOpen && (
-          <div className="py-4 border-t-2 border-white animate-fadeIn">
+          <div className="py-4 border-t-2 border-white animate-fadeIn px-4 sm:px-0">
             <form onSubmit={handleSearch} className="flex items-center">
               <input
                 type="text"
                 placeholder="SEARCH VIDEOS..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="flex-grow input-brutal px-4 py-3 font-mono uppercase placeholder:text-brutal-gray"
+                className="flex-grow input-brutal px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"
                 autoFocus
               />
               <button
                 type="submit"
-                className="btn-brutal-primary px-6 py-3 ml-2"
+                className="btn-brutal-primary px-4 py-2 sm:px-6 sm:py-3 ml-2"
               >
-                <Search size={20} />
+                <Search size={16} className="sm:w-5 sm:h-5" />
               </button>
             </form>
           </div>
