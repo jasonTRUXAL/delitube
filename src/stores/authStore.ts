@@ -126,6 +126,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  resetPassword: async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/change-password`,
+      });
+      
+      if (error) throw error;
+      
+      toast.success('Password reset email sent! Check your inbox.');
+    } catch (error: any) {
+      console.error('Password reset error:', error);
+      toast.error(error.message || 'Failed to send password reset email');
+      throw error;
+    }
+  },
+
   updateProfile: async (updates) => {
     try {
       const { user } = get();
@@ -140,39 +156,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       
       set({ user: { ...user, ...updates } });
       toast.success('Profile updated successfully!');
-    } catch (error: any) {
-      toast.error(error.message);
-      throw error;
-    }
-  },
-
-  resetPassword: async (email) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      });
-      
-      if (error) throw error;
-      
-      // Send notification email about password reset (no auth required)
-      try {
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
-          },
-          body: JSON.stringify({
-            type: 'password_reset_request',
-            email
-          })
-        });
-      } catch (notificationError) {
-        console.warn('Failed to send password reset notification:', notificationError);
-        // Don't fail the reset for notification errors
-      }
-      
-      toast.success('Password reset instructions sent to your email.');
     } catch (error: any) {
       toast.error(error.message);
       throw error;
