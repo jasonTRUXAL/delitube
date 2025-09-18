@@ -128,11 +128,45 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   resetPassword: async (email: string) => {
     try {
+      // First check if the email exists in our system
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email.trim())
+        .maybeSingle();
+      
+      if (profileError) {
+        console.error('Error checking email:', profileError);
+        throw new Error('Failed to verify email address');
+      }
+      
+      if (!profileData) {
+        throw new Error('No account found with this email address');
+      }
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/change-password`,
       });
       
       if (error) throw error;
+      
+      // Send notification email about the password reset request
+      try {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}${API_ENDPOINTS.sendNotificationEmail}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({
+            type: 'password_reset_request',
+            email: email.trim()
+          })
+        });
+      } catch (notificationError) {
+        console.warn('Failed to send password reset notification:', notificationError);
+        // Don't fail the password reset for notification errors
+      }
       
       toast.success('Password reset email sent! Check your inbox.');
     } catch (error: any) {

@@ -39,27 +39,34 @@ const LoginPage = () => {
         {!showForgotPassword ? (
           <button
             onClick={() => setShowForgotPassword(true)}
-            className="w-full text-center text-sm text-gray-600 hover:text-gray-800 underline"
+            className="w-full text-center text-sm text-brutal-gray hover:text-brutal-black underline font-bold uppercase tracking-wide transition-colors dark:text-gray-400 dark:hover:text-white"
           >
-            Forgot Password?
+            FORGOT PASSWORD?
           </button>
         ) : (
-          <div className="bg-gray-50 p-4 rounded-lg border-2 border-black">
-            <h3 className="font-bold text-lg mb-3">RESET PASSWORD</h3>
+          <div className="card-brutal p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-warning-500 border-2 border-brutal-black flex items-center justify-center">
+                <span className="text-white font-black text-xs">!</span>
+              </div>
+              <h3 className="font-black text-lg text-brutal-black font-mono uppercase dark:text-white">
+                RESET PASSWORD
+              </h3>
+            </div>
             <form onSubmit={handlePasswordReset}>
               <input
                 type="email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className="w-full p-3 border-2 border-black rounded-none font-mono text-sm mb-3"
+                placeholder="ENTER YOUR EMAIL ADDRESS"
+                className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray mb-4"
                 required
               />
               <div className="flex gap-2">
                 <button
                   type="submit"
                   disabled={isResetting || !resetEmail.trim()}
-                  className="flex-1 bg-black text-white p-3 font-bold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-brutal flex-1 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isResetting ? 'SENDING...' : 'SEND RESET EMAIL'}
                 </button>
@@ -69,12 +76,15 @@ const LoginPage = () => {
                     setShowForgotPassword(false);
                     setResetEmail('');
                   }}
-                  className="px-4 py-3 border-2 border-black bg-white hover:bg-gray-100 font-bold"
+                  className="btn-brutal-secondary px-6 py-3"
                 >
                   CANCEL
                 </button>
               </div>
             </form>
+            <p className="text-xs text-brutal-gray font-bold uppercase mt-3 dark:text-gray-400">
+              WE'LL SEND A RESET LINK TO YOUR EMAIL IF AN ACCOUNT EXISTS.
+            </p>
           </div>
         )}
       </div>
