@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, SkipForward, SkipBack } from 'lucide-react';
+import { formatTime } from '../utils/formatters';
 
 type VideoPlayerProps = {
   src: string;
@@ -154,22 +155,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, onPlay }) => {
     video.currentTime = Math.max(0, video.currentTime - 10);
   };
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
-
   return (
-    <div className="relative video-container group rounded-lg overflow-hidden bg-black" onDoubleClick={toggleFullscreen}>
-      <video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        className="w-full h-full cursor-pointer"
-        onClick={togglePlay}
-        playsInline
-      />
+    <div className="relative video-container group w-full h-full" onDoubleClick={toggleFullscreen}>
+      <div className="relative w-full h-full bg-black">
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          className="w-full h-full"
+          onClick={togglePlay}
+          playsInline
+        />
+      </div>
       
       {/* Video controls */}
       <div 

@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { ThumbsUp, Eye, Flag, Share2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ThumbsUp, Eye, Flag, Share2, Square, Hash } from 'lucide-react';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
 import VideoPlayer from '../components/VideoPlayer';
 import CommentSection from '../components/CommentSection';
-import VideoGrid from '../components/VideoGrid';
 
 const VideoPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,17 +14,24 @@ const VideoPage = () => {
     loading, 
     fetchVideoById, 
     incrementViews, 
-    likeVideo, 
-    recentVideos,
-    fetchRecentVideos
+    likeVideo,
+    hasLikedVideo,
+    fetchRelatedVideos
   } = useVideoStore();
+  
+  const [relatedVideos, setRelatedVideos] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
       fetchVideoById(id);
-      fetchRecentVideos(4);
     }
-  }, [id, fetchVideoById, fetchRecentVideos]);
+  }, [id, fetchVideoById]);
+  
+  useEffect(() => {
+    if (id) {
+      fetchRelatedVideos(id, 4).then(setRelatedVideos);
+    }
+  }, [id, fetchRelatedVideos]);
 
   const handleVideoPlay = () => {
     if (id) {
@@ -34,11 +40,6 @@ const VideoPage = () => {
   };
 
   const handleLike = () => {
-    if (!user) {
-      alert('You need to be logged in to like videos');
-      return;
-    }
-
     if (id) {
       likeVideo(id);
     }
@@ -52,48 +53,70 @@ const VideoPage = () => {
       });
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard');
+      alert('LINK COPIED TO CLIPBOARD');
     }
   };
 
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="w-16 h-16 border-4 border-brutal-black bg-primary-600 animate-spin"></div>
       </div>
     );
   }
 
   if (!currentVideo) {
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Video Not Found</h2>
-        <p className="text-gray-600 dark:text-gray-400">The video you're looking for doesn't exist or has been removed.</p>
+      <div className="text-center py-20 card-brutal p-12">
+        <div className="w-16 h-16 bg-brutal-gray border-3 border-brutal-black flex items-center justify-center mx-auto mb-4">
+          <Square size={24} className="text-white" fill="currentColor" />
+        </div>
+        <h2 className="text-2xl font-black text-brutal-black mb-4 font-mono uppercase dark:text-white">VIDEO NOT FOUND</h2>
+        <p className="text-brutal-gray font-bold uppercase dark:text-gray-400">THE VIDEO YOU'RE LOOKING FOR DOESN'T EXIST OR HAS BEEN REMOVED.</p>
       </div>
     );
   }
 
-  // Filter out current video from related videos
-  const relatedVideos = recentVideos.filter(v => v.id !== currentVideo.id);
+  const isLiked = id ? hasLikedVideo(id) : false;
 
   return (
     <div className="max-w-screen-xl mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          {/* Video player */}
-          <VideoPlayer 
-            src={currentVideo.url} 
-            poster={currentVideo.thumbnail_url} 
-            onPlay={handleVideoPlay}
-          />
+      {/* Main content */}
+      <div className="max-w-4xl mx-auto">
+        {/* Video player container with fixed aspect ratio */}
+        <div className="relative bg-brutal-black border-4 border-brutal-black overflow-hidden">
+          <div className="aspect-video">
+            <VideoPlayer 
+              src={currentVideo.url} 
+              poster={currentVideo.thumbnail_url} 
+              onPlay={handleVideoPlay}
+            />
+          </div>
+        </div>
 
-          {/* Video details */}
-          <div className="mt-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {currentVideo.title}
-            </h1>
-            
-            <div className="flex items-center justify-between flex-wrap gap-4 py-4 border-b border-gray-200 dark:border-gray-700">
+        {/* Video details */}
+        <div className="mt-6">
+          <h1 className="text-2xl font-black text-brutal-black dark:text-white mb-4 font-mono uppercase">
+            {currentVideo.title}
+          </h1>
+          
+          {/* Hashtags */}
+          {currentVideo.hashtags && currentVideo.hashtags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {currentVideo.hashtags.map((hashtag) => (
+                <div
+                  key={hashtag.id}
+                  className="flex items-center gap-1 bg-secondary-600 text-white px-3 py-1 border-2 border-brutal-black font-mono font-bold uppercase text-sm"
+                >
+                  <Hash size={12} />
+                  <span>{hashtag.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <div className="card-brutal p-6 mb-6">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center space-x-4">
                 {/* User avatar and info */}
                 <div className="flex items-center">
@@ -101,107 +124,130 @@ const VideoPage = () => {
                     <img
                       src={currentVideo.user.avatar_url}
                       alt={currentVideo.user?.username}
-                      className="w-10 h-10 rounded-full mr-3"
+                      className="w-12 h-12 border-3 border-brutal-black mr-4"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-800 flex items-center justify-center mr-3">
-                      <span className="text-primary-700 dark:text-primary-300 font-semibold">
-                        {currentVideo.user?.username.substring(0, 2).toUpperCase() || 'U'}
-                      </span>
+                    <div className="w-12 h-12 bg-primary-600 border-3 border-brutal-black flex items-center justify-center mr-4">
+                      <Square size={16} className="text-white" fill="currentColor" />
                     </div>
                   )}
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-white">
-                      {currentVideo.user?.username || 'Unknown user'}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(currentVideo.created_at).toLocaleDateString()}
+                    <Link
+                      to={`/user/${currentVideo.user?.username}`}
+                      className="font-black text-brutal-black dark:text-white font-mono uppercase hover:text-primary-600 transition-colors"
+                    >
+                      {currentVideo.user?.username || 'UNKNOWN USER'}
+                    </Link>
+                    <p className="text-sm text-brutal-gray font-bold uppercase dark:text-gray-400">
+                      {new Date(currentVideo.created_at).toLocaleDateString().toUpperCase()}
                     </p>
                   </div>
                 </div>
               </div>
               
               {/* Action buttons */}
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap gap-2">
                 <button
                   onClick={handleLike}
-                  className="flex items-center gap-2 px-3 py-1.5 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  disabled={isLiked}
+                  className={`flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black font-bold uppercase transition-colors text-xs sm:text-sm ${
+                    isLiked
+                      ? 'text-primary-600 bg-primary-100'
+                      : 'text-brutal-black bg-white hover:bg-primary-100 dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-primary-900'
+                  }`}
                 >
-                  <ThumbsUp size={18} />
+                  <ThumbsUp size={14} className={`sm:w-[18px] sm:h-[18px] ${isLiked ? 'fill-current' : ''}`} />
                   <span>{currentVideo.likes}</span>
                 </button>
                 
-                <div className="flex items-center gap-2 px-3 py-1.5 text-gray-700 dark:text-gray-300">
-                  <Eye size={18} />
+                <div className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white">
+                  <Eye size={14} className="sm:w-[18px] sm:h-[18px]" />
                   <span>{currentVideo.views}</span>
                 </div>
                 
                 <button
                   onClick={handleShare}
-                  className="flex items-center gap-2 px-3 py-1.5 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black hover:bg-secondary-100 transition-colors font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-secondary-900"
                 >
-                  <Share2 size={18} />
-                  <span>Share</span>
+                  <Share2 size={14} className="sm:w-[18px] sm:h-[18px]" />
+                  <span>SHARE</span>
                 </button>
                 
-                <button className="flex items-center gap-2 px-3 py-1.5 text-gray-700 dark:text-gray-300 hover:text-red-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                  <Flag size={18} />
-                  <span>Report</span>
+                <button className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black hover:bg-accent-100 transition-colors font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-accent-900">
+                  <Flag size={14} className="sm:w-[18px] sm:h-[18px]" />
+                  <span>REPORT</span>
                 </button>
               </div>
             </div>
-            
-            {/* Video description */}
-            <div className="py-4 border-b border-gray-200 dark:border-gray-700">
-              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+          </div>
+          
+          {/* Video description */}
+          {currentVideo.description && (
+            <div className="card-brutal p-6 mb-6">
+              <h4 className="font-black text-brutal-black dark:text-white mb-3 font-mono uppercase">DESCRIPTION</h4>
+              <p className="text-brutal-black dark:text-white whitespace-pre-line font-bold">
                 {currentVideo.description}
               </p>
             </div>
-            
-            {/* Comments section */}
-            {id && <CommentSection videoId={id} />}
-          </div>
+          )}
+          
+          {/* Comments section */}
+          {id && <CommentSection videoId={id} />}
         </div>
-        
-        {/* Related videos sidebar */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Related Videos
+
+        {/* Related videos section */}
+        <div className="mt-12">
+          <h3 className="text-xl font-black text-brutal-black dark:text-white mb-6 font-mono uppercase">
+            RELATED VIDEOS
           </h3>
           
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {relatedVideos.length > 0 ? (
               relatedVideos.map(video => (
-                <div key={video.id} className="flex gap-3">
-                  <a href={`/video/${video.id}`} className="block w-40 flex-shrink-0">
-                    <div className="aspect-video rounded-md overflow-hidden">
-                      <img
-                        src={video.thumbnail_url}
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
+                <a 
+                  key={video.id} 
+                  href={`/video/${video.id}`}
+                  className="card-brutal p-4 brutal-hover"
+                >
+                  <div className="flex gap-4">
+                    <div className="w-32 flex-shrink-0">
+                      <div className="aspect-video border-2 border-brutal-black overflow-hidden">
+                        <img
+                          src={video.thumbnail_url}
+                          alt={video.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     </div>
-                  </a>
-                  <div>
-                    <a 
-                      href={`/video/${video.id}`} 
-                      className="font-medium text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 line-clamp-2 transition-colors"
-                    >
-                      {video.title}
-                    </a>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                      {video.user?.username || 'Unknown user'}
-                    </p>
-                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1 space-x-2">
-                      <span>{video.views} views</span>
-                      <span>•</span>
-                      <span>{new Date(video.created_at).toLocaleDateString()}</span>
+                    <div className="flex-grow min-w-0">
+                      <h4 className="font-black text-brutal-black dark:text-white line-clamp-2 transition-colors font-mono uppercase text-sm">
+                        {video.title}
+                      </h4>
+                      <Link
+                        to={`/user/${video.user?.username}`}
+                        className="text-sm text-brutal-gray mt-1 font-bold uppercase hover:text-primary-600 transition-colors dark:text-gray-400"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {video.user?.username || 'UNKNOWN USER'}
+                      </Link>
+                      <div className="flex items-center text-xs text-brutal-gray mt-1 space-x-2 font-bold uppercase dark:text-gray-400">
+                        <span>{video.views} VIEWS</span>
+                        <span>•</span>
+                        <span>{new Date(video.created_at).toLocaleDateString().toUpperCase()}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </a>
               ))
             ) : (
-              <p className="text-gray-500 dark:text-gray-400">No related videos found.</p>
+              <div className="card-brutal p-8 text-center col-span-2">
+                <div className="w-16 h-16 bg-brutal-gray border-3 border-brutal-black flex items-center justify-center mx-auto mb-4">
+                  <Square size={24} className="text-white" fill="currentColor" />
+                </div>
+                <p className="text-brutal-black font-black font-mono uppercase dark:text-white">
+                  NO RELATED VIDEOS FOUND.
+                </p>
+              </div>
             )}
           </div>
         </div>

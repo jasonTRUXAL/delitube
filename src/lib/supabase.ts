@@ -14,6 +14,12 @@ export type User = {
   is_admin: boolean;
 };
 
+export type Hashtag = {
+  id: string;
+  name: string;
+  created_at: string;
+};
+
 export type Video = {
   id: string;
   title: string;
@@ -25,6 +31,7 @@ export type Video = {
   views: number;
   likes: number;
   user?: User;
+  hashtags?: Hashtag[];
 };
 
 export type Comment = {
