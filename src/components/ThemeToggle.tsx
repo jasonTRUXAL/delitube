@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { STORAGE_KEYS } from '../utils/constants';
 
 const ThemeToggle = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem(STORAGE_KEYS.theme);
+      const savedTheme = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       
       return savedTheme 
@@ -18,10 +17,10 @@ const ThemeToggle = () => {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem(STORAGE_KEYS.theme, 'dark');
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem(STORAGE_KEYS.theme, 'light');
+      localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
 

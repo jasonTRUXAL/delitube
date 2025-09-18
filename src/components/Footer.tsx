@@ -1,31 +1,105 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Play } from 'lucide-react';
-import { generateRandomTagline } from '../utils/slogans';
+import { Github, Twitter, Facebook, Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
-  const [tagline, setTagline] = React.useState('');
-  
-  React.useEffect(() => {
-    setTagline(generateRandomTagline());
-  }, []);
-
   return (
-    <footer className="bg-brutal-black border-t-4 border-primary-600 py-8">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 text-xl font-black text-white brutal-hover">
-            <div className="w-8 h-8 border-3 border-white flex items-center justify-center" style={{ backgroundColor: '#FFA500' }}>
-              <Play size={16} className="text-white ml-1" fill="currentColor" />
+    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-8">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex flex-col space-y-3">
+            <Link to="/" className="flex items-center gap-2 text-xl font-bold">
+              <span className="text-primary-700 dark:text-primary-300">Video</span>
+              <span className="text-accent-500">Vault</span>
+            </Link>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Share your videos with the world. Discover amazing content.
+            </p>
+            <div className="flex space-x-4 mt-4">
+              <a href="#" className="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Twitter size={20} />
+              </a>
+              <a href="#" className="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Facebook size={20} />
+              </a>
+              <a href="#" className="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Instagram size={20} />
+              </a>
+              <a href="#" className="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Youtube size={20} />
+              </a>
+              <a href="#" className="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Github size={20} />
+              </a>
             </div>
-            <span className="font-mono uppercase tracking-wider">
-              DELI<span style={{ color: '#FFA500' }}>TUBE</span>
-            </span>
-          </Link>
-          <p className="text-white font-mono text-sm uppercase tracking-wide flex items-center gap-2">
-            © {new Date().getFullYear()} DELITUBE
-            <span className="text-primary-400">•</span>
-            <span className="text-xs">{tagline.toUpperCase()}</span>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/explore" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Explore
+                </Link>
+              </li>
+              <li>
+                <Link to="/upload" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Upload
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Resources</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/help" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link to="/guidelines" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Community Guidelines
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/terms" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/copyright" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  Copyright
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
+          <p className="text-gray-600 dark:text-gray-400 text-sm text-center">
+            © {new Date().getFullYear()} VideoVault. All rights reserved.
           </p>
         </div>
       </div>

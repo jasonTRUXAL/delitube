@@ -5,22 +5,27 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import VideoPage from './pages/VideoPage';
-import EditVideoPage from './pages/EditVideoPage';
 import UploadPage from './pages/UploadPage';
 import ExplorePage from './pages/ExplorePage';
 import ProfilePage from './pages/ProfilePage';
-import UserProfilePage from './pages/UserProfilePage';
 import MyVideosPage from './pages/MyVideosPage';
 import AdminPage from './pages/AdminPage';
-import ChangePasswordPage from './pages/ChangePasswordPage';
 import { useAuthStore } from './stores/authStore';
 
 function App() {
-  const { refreshUser } = useAuthStore();
+  const { refreshUser, loading } = useAuthStore();
   
   useEffect(() => {
     refreshUser();
-  }, []);
+  }, [refreshUser]);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -30,12 +35,9 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="video/:id" element={<VideoPage />} />
-          <Route path="video/:id/edit" element={<EditVideoPage />} />
           <Route path="upload" element={<UploadPage />} />
           <Route path="explore" element={<ExplorePage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="change-password" element={<ChangePasswordPage />} />
-          <Route path="user/:username" element={<UserProfilePage />} />
           <Route path="my-videos" element={<MyVideosPage />} />
           <Route path="admin" element={<AdminPage />} />
           <Route path="search" element={<ExplorePage />} />
@@ -45,4 +47,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
