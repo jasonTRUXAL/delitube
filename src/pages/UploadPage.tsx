@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, X, FileVideo, Image } from 'lucide-react';
+import { Upload, X, FileVideo, Image, Square } from 'lucide-react';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
+import HashtagInput from '../components/HashtagInput';
 
 const UploadPage = () => {
   const { user } = useAuthStore();
@@ -11,6 +12,7 @@ const UploadPage = () => {
   
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -32,13 +34,13 @@ const UploadPage = () => {
     
     // Validate file type (only accept video files)
     if (!file.type.startsWith('video/')) {
-      setError('Please select a valid video file');
+      setError('PLEASE SELECT A VALID VIDEO FILE');
       return;
     }
     
     // Validate file size (limit to 100MB for this example)
     if (file.size > 100 * 1024 * 1024) {
-      setError('Video file is too large. Please select a file under 100MB');
+      setError('VIDEO FILE IS TOO LARGE. PLEASE SELECT A FILE UNDER 100MB');
       return;
     }
     
@@ -56,7 +58,7 @@ const UploadPage = () => {
     
     // Validate file type (only accept image files)
     if (!file.type.startsWith('image/')) {
-      setError('Please select a valid image file for the thumbnail');
+      setError('PLEASE SELECT A VALID IMAGE FILE FOR THE THUMBNAIL');
       return;
     }
     
@@ -74,25 +76,25 @@ const UploadPage = () => {
     
     // Validate form
     if (!title.trim()) {
-      setError('Please enter a title');
+      setError('PLEASE ENTER A TITLE');
       return;
     }
     
     if (!videoFile) {
-      setError('Please select a video file');
+      setError('PLEASE SELECT A VIDEO FILE');
       return;
     }
     
     if (!thumbnailFile) {
-      setError('Please select a thumbnail image');
+      setError('PLEASE SELECT A THUMBNAIL IMAGE');
       return;
     }
     
     try {
-      await uploadVideo(videoFile, thumbnailFile, title, description);
+      await uploadVideo(videoFile, thumbnailFile, title, description, hashtags);
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'An error occurred during upload');
+      setError(err.message?.toUpperCase() || 'AN ERROR OCCURRED DURING UPLOAD');
     }
   };
   
@@ -109,50 +111,67 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Upload Video</h1>
+    <div className="max-w-4xl mx-auto">
+      {/* Header Section */}
+      <div className="card-brutal p-8 mb-8">
+        <div className="flex items-center gap-6">
+          <div className="w-24 h-24 bg-primary-400 border-3 border-brutal-black flex items-center justify-center dark:border-brutal-dark-brown">
+            <Upload size={32} className="text-brutal-black" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-brutal-black font-mono uppercase mb-2 dark:text-white">
+              UPLOAD VIDEO
+            </h1>
+            <p className="text-brutal-gray font-bold uppercase tracking-wide dark:text-gray-400">
+              SHARE YOUR VIDEO WITH DOODLETOWN
+            </p>
+          </div>
+        </div>
+      </div>
       
       {error && (
-        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+        <div className="mb-6 p-4 bg-accent-500 border-3 border-brutal-black text-white font-mono font-bold text-sm dark:border-brutal-dark-brown">
           {error}
         </div>
       )}
       
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Video and thumbnail upload section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Video upload */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Video File <span className="text-red-500">*</span>
+          <div className="space-y-4">
+            <label className="block text-sm font-black text-brutal-black font-mono uppercase dark:text-white">
+              VIDEO FILE <span className="text-accent-600">*</span>
             </label>
             
             {videoPreview ? (
-              <div className="relative aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+              <div className="relative aspect-video card-brutal overflow-hidden">
                 <video
                   src={videoPreview}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain bg-brutal-black"
                   controls
                 />
                 <button
                   type="button"
                   onClick={clearVideo}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                  className="absolute top-4 right-4 w-10 h-10 bg-accent-600 border-3 border-white flex items-center justify-center brutal-hover"
                 >
-                  <X size={16} />
+                  <X size={16} className="text-white" />
                 </button>
               </div>
             ) : (
               <div
                 onClick={() => videoInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition-colors aspect-video"
+                className="border-4 border-dashed border-brutal-black bg-white p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-primary-50 transition-colors aspect-video brutal-hover dark:border-brutal-dark-brown dark:bg-brutal-cream dark:hover:bg-primary-100"
               >
-                <FileVideo size={48} className="text-gray-400 mb-2" />
-                <p className="text-gray-600 dark:text-gray-400 text-center">
-                  Drag and drop or click to select a video
+                <div className="w-16 h-16 bg-primary-400 border-3 border-brutal-black flex items-center justify-center mb-4 dark:border-brutal-dark-brown">
+                  <FileVideo size={24} className="text-brutal-black" />
+                </div>
+                <p className="text-brutal-black text-center font-black font-mono uppercase mb-2">
+                  DRAG AND DROP OR CLICK TO SELECT A VIDEO
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  MP4, WebM or MOV (max. 100MB)
+                <p className="text-xs text-brutal-gray font-bold uppercase">
+                  MP4, WEBM OR MOV (MAX. 100MB)
                 </p>
               </div>
             )}
@@ -167,13 +186,13 @@ const UploadPage = () => {
           </div>
           
           {/* Thumbnail upload */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Thumbnail <span className="text-red-500">*</span>
+          <div className="space-y-4">
+            <label className="block text-sm font-black text-brutal-black font-mono uppercase dark:text-white">
+              THUMBNAIL <span className="text-accent-600">*</span>
             </label>
             
             {thumbnailPreview ? (
-              <div className="relative aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+              <div className="relative aspect-video card-brutal overflow-hidden">
                 <img
                   src={thumbnailPreview}
                   alt="Thumbnail preview"
@@ -182,22 +201,24 @@ const UploadPage = () => {
                 <button
                   type="button"
                   onClick={clearThumbnail}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                  className="absolute top-4 right-4 w-10 h-10 bg-accent-600 border-3 border-white flex items-center justify-center brutal-hover"
                 >
-                  <X size={16} />
+                  <X size={16} className="text-white" />
                 </button>
               </div>
             ) : (
               <div
                 onClick={() => thumbnailInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition-colors aspect-video"
+                className="border-4 border-dashed border-brutal-black bg-white p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-primary-50 transition-colors aspect-video brutal-hover dark:border-brutal-dark-brown dark:bg-brutal-cream dark:hover:bg-primary-100"
               >
-                <Image size={48} className="text-gray-400 mb-2" />
-                <p className="text-gray-600 dark:text-gray-400 text-center">
-                  Upload a thumbnail image
+                <div className="w-16 h-16 bg-secondary-600 border-3 border-brutal-black flex items-center justify-center mb-4 dark:border-brutal-dark-brown">
+                  <Image size={24} className="text-white" />
+                </div>
+                <p className="text-brutal-black text-center font-black font-mono uppercase mb-2">
+                  UPLOAD A THUMBNAIL IMAGE
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  JPG, PNG or GIF (16:9 ratio recommended)
+                <p className="text-xs text-brutal-gray font-bold uppercase">
+                  JPG, PNG OR GIF (16:9 RATIO RECOMMENDED)
                 </p>
               </div>
             )}
@@ -212,60 +233,98 @@ const UploadPage = () => {
           </div>
         </div>
         
-        {/* Title and description */}
-        <div className="space-y-4">
+        {/* Title, description, and hashtags */}
+        <div className="card-brutal p-8 space-y-6">
+          <h3 className="text-xl font-black text-brutal-black font-mono uppercase mb-6 dark:text-white">
+            VIDEO DETAILS
+          </h3>
+          
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Title <span className="text-red-500">*</span>
+            <label htmlFor="title" className="block text-sm font-black text-brutal-black mb-2 font-mono uppercase dark:text-white">
+              TITLE <span className="text-accent-600">*</span>
             </label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-              placeholder="Enter a title for your video"
+              className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray"
+              placeholder="ENTER A TITLE FOR YOUR VIDEO"
               maxLength={100}
               required
             />
+            <p className="text-xs text-brutal-gray font-bold mt-1 uppercase">
+              {title.length}/100 CHARACTERS
+            </p>
           </div>
           
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Description
+            <label htmlFor="description" className="block text-sm font-black text-brutal-black mb-2 font-mono uppercase dark:text-white">
+              DESCRIPTION
             </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white resize-none"
-              placeholder="Describe your video (optional)"
+              className="input-brutal w-full px-4 py-3 font-mono placeholder:text-brutal-gray resize-none"
+              placeholder="DESCRIBE YOUR VIDEO (OPTIONAL)"
             ></textarea>
           </div>
+          
+          {/* Hashtags */}
+          <HashtagInput
+            selectedHashtags={hashtags}
+            onHashtagsChange={setHashtags}
+            maxHashtags={3}
+          />
         </div>
         
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center gap-2 bg-primary-600 text-white py-2 px-6 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white\" xmlns="http://www.w3.org/2000/svg\" fill="none\" viewBox="0 0 24 24">
-                  <circle className="opacity-25\" cx="12\" cy="12\" r="10\" stroke="currentColor\" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>Uploading...</span>
-              </>
-            ) : (
-              <>
-                <Upload size={18} />
-                <span>Upload Video</span>
-              </>
-            )}
-          </button>
+        {/* Submit Section */}
+        <div className="card-brutal p-8">
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-brutal-gray border-3 border-brutal-black flex items-center justify-center dark:border-brutal-dark-brown">
+                <Square size={16} className="text-white" fill="currentColor" />
+              </div>
+              <div>
+                <p className="font-black text-brutal-black font-mono uppercase text-sm dark:text-white">
+                  READY TO UPLOAD?
+                </p>
+                <p className="text-xs text-brutal-gray font-bold uppercase">
+                  MAKE SURE ALL FIELDS ARE FILLED
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="btn-brutal-secondary px-6 py-3"
+              >
+                CANCEL
+              </button>
+              
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-brutal px-8 py-3"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin mr-3"></div>
+                    UPLOADING...
+                  </span>
+                ) : (
+                  <>
+                    <Upload size={18} className="inline mr-2" />
+                    UPLOAD VIDEO
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

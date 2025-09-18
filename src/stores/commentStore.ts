@@ -37,9 +37,17 @@ export const useCommentStore = create<CommentState>((set, get) => ({
   addComment: async (content, videoId) => {
     set({ loading: true });
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) throw new Error('User not authenticated');
+      
       const { error } = await supabase
         .from('comments')
-        .insert({ content, video_id: videoId });
+        .insert({ 
+          content, 
+          video_id: videoId,
+          user_id: user.id 
+        });
       
       if (error) throw error;
       

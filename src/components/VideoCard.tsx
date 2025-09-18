@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, ThumbsUp, Clock } from 'lucide-react';
+import { Eye, ThumbsUp, Clock, Square, Hash } from 'lucide-react';
 import { Video } from '../lib/supabase';
+import { formatRelativeTime } from '../utils/formatters';
 
 type VideoCardProps = {
   video: Video;
@@ -9,67 +10,94 @@ type VideoCardProps = {
 };
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, className = '' }) => {
-  // Format date to relative time (e.g., "2 days ago")
-  const formatRelativeTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) return 'just now';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
-    return `${Math.floor(diffInSeconds / 31536000)} years ago`;
-  };
-
   return (
     <Link
       to={`/video/${video.id}`}
-      className={`group block overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 ${className}`}
+      className={`group block card-brutal brutal-hover ${className}`}
     >
-      <div className="relative aspect-video overflow-hidden">
+      <div className="relative aspect-video overflow-hidden bg-brutal-black">
         <img
           src={video.thumbnail_url || 'https://images.pexels.com/photos/2873486/pexels-photo-2873486.jpeg'}
           alt={video.title}
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-          <div className="flex items-center space-x-3 text-white text-sm">
-            <div className="flex items-center">
-              <Eye size={16} className="mr-1" />
+        <div className="absolute inset-0 bg-brutal-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end p-2 sm:p-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 text-white text-xs sm:text-sm font-mono font-bold uppercase">
+            <div className="flex items-center bg-primary-600 border-2 border-white px-1 py-1 sm:px-2">
+              <Eye size={10} className="sm:w-3 sm:h-3 mr-1" />
               <span>{video.views}</span>
             </div>
-            <div className="flex items-center">
-              <ThumbsUp size={16} className="mr-1" />
+            <div className="flex items-center bg-secondary-600 border-2 border-white px-1 py-1 sm:px-2">
+              <ThumbsUp size={10} className="sm:w-3 sm:h-3 mr-1" />
               <span>{video.likes}</span>
             </div>
           </div>
         </div>
       </div>
       
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-          {video.title}
-        </h3>
+      {/* Fixed height content container with consistent spacing */}
+      <div className="p-3 sm:p-4 bg-white dark:bg-brutal-dark-brown flex flex-col h-36 sm:h-40">
+        {/* Title - Fixed height container */}
+        <div className="h-12 sm:h-14 mb-2 sm:mb-3 flex items-start">
+          <h3 className="font-black text-brutal-black line-clamp-2 group-hover:text-primary-600 transition-colors text-sm sm:text-base lg:text-lg leading-tight font-mono uppercase dark:text-white">
+            {video.title}
+          </h3>
+        </div>
         
-        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-2">
-          <div className="flex items-center">
-            {video.user?.avatar_url ? (
-              <img 
-                src={video.user.avatar_url} 
-                alt={video.user?.username} 
-                className="w-6 h-6 rounded-full mr-2"
-              />
-            ) : (
-              <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 mr-2" />
-            )}
-            <span>{video.user?.username || 'Unknown user'}</span>
-          </div>
-          
-          <div className="flex items-center ml-auto">
-            <Clock size={14} className="mr-1" />
-            <span>{formatRelativeTime(video.created_at)}</span>
+        {/* Hashtags - Fixed height container */}
+        <div className="h-6 sm:h-8 mb-2 sm:mb-3 flex items-start">
+          {video.hashtags && video.hashtags.length > 0 ? (
+            <div className="flex flex-wrap gap-1">
+              {video.hashtags.slice(0, 2).map((hashtag) => (
+                <div
+                  key={hashtag.id}
+                  className="flex items-center gap-1 bg-secondary-100 text-secondary-800 px-1 sm:px-2 py-1 border border-brutal-black font-mono font-bold uppercase text-xs"
+                >
+                  <Hash size={6} className="sm:w-2 sm:h-2" />
+                  <span className="truncate max-w-12 sm:max-w-16">{hashtag.name}</span>
+                </div>
+              ))}
+              {video.hashtags.length > 2 && (
+                <div className="flex items-center gap-1 bg-brutal-gray/20 text-brutal-gray px-2 py-1 border border-brutal-black font-mono font-bold uppercase text-xs">
+                  <span>+{video.hashtags.length - 2}</span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div></div> // Empty div to maintain spacing
+          )}
+        </div>
+        
+        {/* Bottom section - User and time info */}
+        <div className="flex-grow flex flex-col justify-end">
+          <div className="flex items-center justify-between text-xs sm:text-sm text-brutal-black font-bold dark:text-white">
+            {/* User info - Fixed width container */}
+            <div className="flex items-center min-w-0 flex-1 mr-1 sm:mr-2">
+              {video.user?.avatar_url ? (
+                <img 
+                  src={video.user.avatar_url} 
+                  alt={video.user?.username} 
+                  className="w-4 h-4 sm:w-6 sm:h-6 border-2 border-brutal-black mr-1 sm:mr-2 flex-shrink-0"
+                />
+              ) : (
+                <div className="w-4 h-4 sm:w-6 sm:h-6 bg-primary-600 border-2 border-brutal-black mr-1 sm:mr-2 flex items-center justify-center flex-shrink-0">
+                  <Square size={8} className="sm:w-2.5 sm:h-2.5 text-white" fill="currentColor" />
+                </div>
+              )}
+              <Link
+                to={`/user/${video.user?.username}`}
+                className="font-mono uppercase hover:text-primary-600 transition-colors truncate"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {video.user?.username || 'UNKNOWN'}
+              </Link>
+            </div>
+            
+            {/* Time info - Fixed width */}
+            <div className="flex items-center bg-brutal-gray/20 border border-brutal-black px-1 sm:px-2 py-1 font-mono flex-shrink-0">
+              <Clock size={8} className="sm:w-2.5 sm:h-2.5 mr-1" />
+              <span className="text-xs whitespace-nowrap">{formatRelativeTime(video.created_at)}</span>
+            </div>
           </div>
         </div>
       </div>

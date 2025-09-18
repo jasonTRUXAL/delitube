@@ -1,145 +1,134 @@
 import React, { useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Users, Square } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoGrid from '../components/VideoGrid';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
+import { generateRandomTagline, generateRandomHeroText } from '../utils/slogans';
 
 const HomePage = () => {
   const { recentVideos, loading, fetchRecentVideos } = useVideoStore();
   const { user } = useAuthStore();
+  
+  // Generate random text on component mount
+  const [tagline, setTagline] = React.useState('');
+  const [heroText, setHeroText] = React.useState({ number: '#1', leading: 'Leading' });
+  
+  React.useEffect(() => {
+    setTagline(generateRandomTagline());
+    setHeroText(generateRandomHeroText());
+  }, []);
 
   useEffect(() => {
     fetchRecentVideos(8);
   }, [fetchRecentVideos]);
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-16">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 to-secondary-600 rounded-xl py-12 md:py-16 px-8 text-white">
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Share Your Videos With The World
+      <section className="relative bg-primary-600 border-4 border-brutal-black shadow-brutal-lg p-4 sm:p-6 md:p-8 lg:p-12 dark:border-brutal-dark-brown dark:shadow-brutal-dark-lg">
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 sm:gap-3 bg-white border-3 border-brutal-black px-3 py-2 sm:px-6 sm:py-3 mb-6 sm:mb-8 shadow-brutal dark:border-brutal-dark-brown dark:shadow-brutal-dark">
+            <Square size={12} className="sm:w-4 sm:h-4 text-brutal-black" fill="currentColor" />
+            <span className="font-mono font-bold uppercase tracking-wide text-brutal-black text-xs sm:text-sm">{tagline.toUpperCase()}</span>
+          </div>
+          
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-black mb-6 sm:mb-8 leading-tight text-brutal-black font-mono uppercase">
+            <span className="text-brutal-black">DOODLETOWN'S {heroText.number}</span>
+            <span className="block text-white mt-1 sm:mt-2">
+              {heroText.leading.toUpperCase()} WEBTUBE
+            </span>
           </h1>
-          <p className="text-lg md:text-xl opacity-90 mb-8">
-            Upload, share, and discover amazing video content from creators around the globe.
+          
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-8 sm:mb-10 lg:mb-12 max-w-2xl mx-auto leading-relaxed text-brutal-black font-bold px-4 sm:px-0">
+            DELI-KUN'S PREMIERE STREAMING AND VIDEO SHARING SERVICE, RATED BEST ONLY OPTION ANNUALLY!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4 sm:px-0">
             {user ? (
               <Link
                 to="/upload"
-                className="bg-white text-primary-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition-colors focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 focus:outline-none"
+                className="btn-brutal px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg"
               >
-                Upload Your Video
+                <Square size={16} className="sm:w-5 sm:h-5 inline mr-2 sm:mr-3" />
+                UPLOAD NOW
               </Link>
             ) : (
               <Link
                 to="/register"
-                className="bg-white text-primary-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition-colors focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600 focus:outline-none"
+                className="btn-brutal px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg"
               >
-                Create Account
+                <Square size={16} className="sm:w-5 sm:h-5 inline mr-2 sm:mr-3" />
+                JOIN NOW
               </Link>
             )}
             <Link
               to="/explore"
-              className="bg-transparent border-2 border-white text-white hover:bg-white/10 px-6 py-3 rounded-md font-medium transition-colors focus:ring-2 focus:ring-white focus:outline-none"
+              className="btn-brutal-secondary px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg"
             >
-              Explore Videos
+              EXPLORE VIDEOS
+              <ArrowRight size={16} className="sm:w-5 sm:h-5 inline ml-2 sm:ml-3" />
             </Link>
           </div>
         </div>
         
         {/* Background decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
+        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-secondary-400 border-2 sm:border-3 border-brutal-black dark:border-brutal-dark-brown"></div>
+        <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 bg-white border-2 sm:border-3 border-brutal-black dark:border-brutal-dark-brown"></div>
+        <div className="hidden sm:block absolute top-1/2 right-1/4 w-6 h-6 lg:w-8 lg:h-8 bg-accent-500 border-2 border-brutal-black dark:border-brutal-dark-brown"></div>
       </section>
 
       {/* Recent Videos Section */}
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Recent Videos</h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-brutal-black dark:text-white mb-2 font-mono uppercase">
+              RECENT VIDEOS
+            </h2>
+            <p className="text-brutal-gray dark:text-gray-400 font-bold uppercase tracking-wide text-sm sm:text-base">
+              FRESH CONTENT FROM OUR CREATORS
+            </p>
+          </div>
           <Link
             to="/explore"
-            className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium flex items-center gap-1 transition-colors"
+            className="btn-brutal-secondary px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base"
           >
-            <span>View All</span>
-            <ArrowRight size={16} />
+            VIEW ALL
+            <ArrowRight size={14} className="sm:w-4 sm:h-4 inline ml-2" />
           </Link>
         </div>
 
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <div className="w-12 h-12 sm:w-16 sm:h-16 border-4 border-brutal-black bg-primary-400 animate-spin dark:border-brutal-dark-brown"></div>
           </div>
         ) : (
           <VideoGrid
             videos={recentVideos}
-            emptyMessage="No videos have been uploaded yet. Be the first to share a video!"
+            emptyMessage="NO VIDEOS YET. BE THE FIRST TO UPLOAD!"
           />
         )}
       </section>
 
-      {/* Features Section */}
-      <section className="py-12 rounded-xl bg-gray-100 dark:bg-gray-800 px-6">
-        <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-10">
-          Why Choose VideoVault?
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
-            <div className="w-16 h-16 flex items-center justify-center bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 rounded-full mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Secure Sharing</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Your content is safe with us. Control who sees your videos with flexible privacy settings.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
-            <div className="w-16 h-16 flex items-center justify-center bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 rounded-full mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Lightning Fast</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Enjoy fast uploads and smooth playback with our optimized streaming technology.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
-            <div className="w-16 h-16 flex items-center justify-center bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 rounded-full mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Engage with Community</h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Connect with creators and viewers through comments and likes on videos.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       {!user && (
-        <section className="text-center py-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Ready to join our community?
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-            Create an account today and start sharing your videos with the world.
-            It's free and only takes a minute to get started.
-          </p>
-          <Link
-            to="/register"
-            className="inline-block bg-primary-600 text-white hover:bg-primary-700 px-6 py-3 rounded-md font-medium transition-colors"
-          >
-            Get Started Now
-          </Link>
+        <section className="text-center py-8 sm:py-12 lg:py-16 bg-brutal-black border-4 border-primary-400 shadow-brutal-orange-lg dark:bg-brutal-dark-brown dark:border-primary-500">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black mb-4 sm:mb-6 text-white font-mono uppercase">
+              READY TO JOIN DOODLETOWN?
+            </h2>
+            <p className="text-sm sm:text-base lg:text-xl mb-6 sm:mb-8 text-white font-bold leading-relaxed">
+              CREATE YOUR ACCOUNT AND START SHARING VIDEO CONTENT TODAY.
+              NO BULLSHIT. NO FAKE PROMISES. JUST REAL VIDEO SHARING.
+            </p>
+            <Link
+              to="/register"
+              className="inline-flex items-center gap-2 sm:gap-3 bg-success-600 text-white border-3 border-white px-6 py-3 sm:px-8 sm:py-4 font-black uppercase tracking-wide shadow-brutal hover:bg-success-700 transition-all duration-100 brutal-hover text-sm sm:text-base"
+            >
+              <Square size={16} className="sm:w-5 sm:h-5" />
+              START NOW
+            </Link>
+          </div>
         </section>
       )}
     </div>
