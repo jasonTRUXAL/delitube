@@ -146,35 +146,35 @@ const VideoPage = () => {
               </div>
               
               {/* Action buttons */}
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 sm:space-x-4 flex-wrap gap-2">
                 <button
                   onClick={handleLike}
                   disabled={isLiked}
-                  className={`flex items-center gap-2 px-4 py-2 border-3 border-brutal-black font-bold uppercase transition-colors ${
+                  className={`flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black font-bold uppercase transition-colors text-xs sm:text-sm ${
                     isLiked
                       ? 'text-primary-600 bg-primary-100'
                       : 'text-brutal-black bg-white hover:bg-primary-100 dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-primary-900'
                   }`}
                 >
-                  <ThumbsUp size={18} className={isLiked ? 'fill-current' : ''} />
+                  <ThumbsUp size={14} className={`sm:w-[18px] sm:h-[18px] ${isLiked ? 'fill-current' : ''}`} />
                   <span>{currentVideo.likes}</span>
                 </button>
                 
-                <div className="flex items-center gap-2 px-4 py-2 border-3 border-brutal-black bg-white text-brutal-black font-bold uppercase dark:bg-brutal-dark-brown dark:text-white">
-                  <Eye size={18} />
+                <div className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white">
+                  <Eye size={14} className="sm:w-[18px] sm:h-[18px]" />
                   <span>{currentVideo.views}</span>
                 </div>
                 
                 <button
                   onClick={handleShare}
-                  className="flex items-center gap-2 px-4 py-2 border-3 border-brutal-black bg-white text-brutal-black hover:bg-secondary-100 transition-colors font-bold uppercase dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-secondary-900"
+                  className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black hover:bg-secondary-100 transition-colors font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-secondary-900"
                 >
-                  <Share2 size={18} />
+                  <Share2 size={14} className="sm:w-[18px] sm:h-[18px]" />
                   <span>SHARE</span>
                 </button>
                 
-                <button className="flex items-center gap-2 px-4 py-2 border-3 border-brutal-black bg-white text-brutal-black hover:bg-accent-100 transition-colors font-bold uppercase dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-accent-900">
-                  <Flag size={18} />
+                <button className="flex items-center gap-1 sm:gap-2 px-2 py-2 sm:px-4 border-3 border-brutal-black bg-white text-brutal-black hover:bg-accent-100 transition-colors font-bold uppercase text-xs sm:text-sm dark:bg-brutal-dark-brown dark:text-white dark:hover:bg-accent-900">
+                  <Flag size={14} className="sm:w-[18px] sm:h-[18px]" />
                   <span>REPORT</span>
                 </button>
               </div>
