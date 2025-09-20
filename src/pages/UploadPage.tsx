@@ -248,8 +248,8 @@ const UploadPage = () => {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray"
-              placeholder="ENTER A TITLE FOR YOUR VIDEO"
+              className="input-brutal w-full px-4 py-3 font-mono placeholder:text-brutal-gray"
+              placeholder="Enter a title for your video"
               maxLength={100}
               required
             />
@@ -268,7 +268,7 @@ const UploadPage = () => {
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               className="input-brutal w-full px-4 py-3 font-mono placeholder:text-brutal-gray resize-none"
-              placeholder="DESCRIBE YOUR VIDEO (OPTIONAL)"
+              placeholder="Describe your video (optional)"
             ></textarea>
           </div>
           
