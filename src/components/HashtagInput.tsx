@@ -107,8 +107,8 @@ const HashtagInput: React.FC<HashtagInputProps> = ({
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onFocus={() => inputValue.trim() && setShowSuggestions(true)}
-                className="input-brutal w-full px-4 py-3 pl-12 font-mono uppercase placeholder:text-brutal-gray"
-                placeholder="ADD HASHTAG..."
+                className="input-brutal w-full px-4 py-3 pl-12 font-mono placeholder:text-brutal-gray"
+                placeholder="Add hashtag..."
                 maxLength={30}
               />
               <Hash size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-brutal-gray" />

@@ -338,7 +338,7 @@ const ProfilePage = () => {
                   type="text"
                   value={user.username}
                   disabled
-                  className="input-brutal w-full px-4 py-3 font-mono uppercase bg-brutal-gray/20 text-brutal-gray cursor-not-allowed"
+                  className="input-brutal w-full px-4 py-3 font-mono bg-brutal-gray/20 text-brutal-gray cursor-not-allowed"
                 />
                 <p className="mt-2 text-xs text-brutal-gray font-bold uppercase dark:text-gray-400">
                   USERNAME CANNOT BE CHANGED TO ENSURE UNIQUENESS
@@ -401,7 +401,7 @@ const ProfilePage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-brutal w-full px-4 py-3 font-mono placeholder:text-brutal-gray"
-              placeholder="ENTER NEW EMAIL ADDRESS"
+              placeholder="Enter new email address"
             />
           </div>
           

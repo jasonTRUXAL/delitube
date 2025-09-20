@@ -62,8 +62,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ videoId }) => {
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                placeholder="ADD A COMMENT..."
-                className="input-brutal w-full px-4 py-3 font-mono uppercase placeholder:text-brutal-gray resize-none"
+                placeholder="Add a comment..."
+                className="input-brutal w-full px-4 py-3 font-mono placeholder:text-brutal-gray resize-none"
                 rows={3}
                 required
               />

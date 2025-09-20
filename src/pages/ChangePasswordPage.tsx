@@ -105,7 +105,7 @@ const ChangePasswordPage = () => {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="input-brutal w-full px-4 py-3 pr-12 font-mono placeholder:text-brutal-gray"
-                placeholder="ENTER CURRENT PASSWORD"
+                placeholder="Enter current password"
               />
               <button
                 type="button"
@@ -130,7 +130,7 @@ const ChangePasswordPage = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="input-brutal w-full px-4 py-3 pr-12 font-mono placeholder:text-brutal-gray"
-                placeholder="ENTER NEW PASSWORD"
+                placeholder="Enter new password"
                 minLength={6}
               />
               <button
@@ -159,7 +159,7 @@ const ChangePasswordPage = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="input-brutal w-full px-4 py-3 pr-12 font-mono placeholder:text-brutal-gray"
-                placeholder="CONFIRM NEW PASSWORD"
+                placeholder="Confirm new password"
                 minLength={6}
               />
               <button
