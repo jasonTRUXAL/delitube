@@ -299,7 +299,7 @@ const Navbar = () => {
             <form onSubmit={handleSearch} className="flex items-center">
               <input
                 type="text"
-                placeholder="SEARCH VIDEOS..."
+                placeholder="Search videos..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="flex-grow input-brutal px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"

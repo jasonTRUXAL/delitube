@@ -133,8 +133,8 @@ const ExplorePage = () => {
                 type="text"
                 value={localSearchQuery}
                 onChange={(e) => setLocalSearchQuery(e.target.value)}
-                placeholder="SEARCH FOR VIDEOS..."
-                className="input-brutal w-full px-3 py-3 sm:px-4 sm:py-4 pr-12 sm:pr-16 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base lg:text-lg"
+                placeholder="Search for videos..."
+                className="input-brutal w-full px-3 py-3 sm:px-4 sm:py-4 pr-12 sm:pr-16 font-mono placeholder:text-brutal-gray text-sm sm:text-base lg:text-lg"
               />
               <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
                 <Search size={16} className="sm:w-5 sm:h-5 text-brutal-gray" />

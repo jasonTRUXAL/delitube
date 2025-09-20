@@ -58,7 +58,7 @@ const LoginPage = () => {
                 type="email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                placeholder="ENTER YOUR EMAIL ADDRESS"
+                placeholder="Enter your email address"
                 className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray mb-4 text-sm sm:text-base"
                 required
               />

@@ -82,8 +82,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
               required
               value={formData.username}
               onChange={handleChange}
-              className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"
-              placeholder="YOUR USERNAME"
+              className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
+              placeholder="Your username"
             />
           </div>
         )}
@@ -99,8 +99,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
             required
             value={formData.email}
             onChange={handleChange}
-            className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono uppercase placeholder:text-brutal-gray text-sm sm:text-base"
-            placeholder="YOUR@EMAIL.COM"
+            className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
+            placeholder="your@email.com"
           />
         </div>
 
@@ -117,7 +117,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
               value={formData.password}
               onChange={handleChange}
               className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 pr-10 sm:pr-12 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               minLength={6}
             />
             <button
