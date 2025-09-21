@@ -1,9 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, X, FileVideo, Image, Square } from 'lucide-react';
+import { Upload, X, FileVideo, Image, Square, Zap } from 'lucide-react';
 import { useVideoStore } from '../stores/videoStore';
 import { useAuthStore } from '../stores/authStore';
 import HashtagInput from '../components/HashtagInput';
+import VideoCompressionModal from '../components/VideoCompressionModal';
+import { 
+  compressVideo, 
+  getCompressionInfo, 
+  shouldCompressVideo 
+} from '../utils/videoCompression';
 
 const UploadPage = () => {
   const { user } = useAuthStore();
@@ -18,6 +24,17 @@ const UploadPage = () => {
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showCompressionModal, setShowCompressionModal] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
+  const [compressionProgress, setCompressionProgress] = useState(0);
+  const [compressionComplete, setCompressionComplete] = useState(false);
+  const [originalVideoSize, setOriginalVideoSize] = useState<number | null>(null);
+  const [compressedVideoSize, setCompressedVideoSize] = useState<number | null>(null);
+  const [compressionInfo, setCompressionInfo] = useState({
+    shouldCompress: false,
+    estimatedSavings: '0%',
+    estimatedTime: '0s'
+  });
   
   const videoInputRef = useRef<HTMLInputElement>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
@@ -46,10 +63,20 @@ const UploadPage = () => {
     
     setVideoFile(file);
     setError(null);
+    setOriginalVideoSize(file.size);
+    
+    // Get compression info
+    const info = getCompressionInfo(file);
+    setCompressionInfo(info);
     
     // Create a preview URL for the video
     const url = URL.createObjectURL(file);
     setVideoPreview(url);
+    
+    // Show compression modal if compression is recommended
+    if (info.shouldCompress) {
+      setShowCompressionModal(true);
+    }
   };
   
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +95,51 @@ const UploadPage = () => {
     // Create a preview URL for the thumbnail
     const url = URL.createObjectURL(file);
     setThumbnailPreview(url);
+  };
+  
+  const handleCompressVideo = async () => {
+    if (!videoFile) return;
+    
+    setIsCompressing(true);
+    setCompressionProgress(0);
+    
+    try {
+      const compressedFile = await compressVideo(videoFile, (progress) => {
+        setCompressionProgress(progress);
+      });
+      
+      // Update video file with compressed version
+      setVideoFile(compressedFile);
+      setCompressedVideoSize(compressedFile.size);
+      
+      // Update preview URL
+      if (videoPreview) {
+        URL.revokeObjectURL(videoPreview);
+      }
+      const newUrl = URL.createObjectURL(compressedFile);
+      setVideoPreview(newUrl);
+      
+      setCompressionComplete(true);
+      setIsCompressing(false);
+      
+    } catch (error) {
+      console.error('Compression failed:', error);
+      setError('VIDEO COMPRESSION FAILED. USING ORIGINAL FILE.');
+      setIsCompressing(false);
+      setShowCompressionModal(false);
+    }
+  };
+  
+  const handleSkipCompression = () => {
+    setShowCompressionModal(false);
+    setCompressionComplete(false);
+    setCompressionProgress(0);
+  };
+  
+  const handleCompressionModalClose = () => {
+    setShowCompressionModal(false);
+    setCompressionComplete(false);
+    setCompressionProgress(0);
   };
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,6 +223,13 @@ const UploadPage = () => {
                   className="w-full h-full object-contain bg-brutal-black"
                   controls
                 />
+                {/* Compression indicator */}
+                {compressedVideoSize && originalVideoSize && (
+                  <div className="absolute top-4 left-4 bg-success-600 text-white px-3 py-1 border-2 border-white font-mono font-bold uppercase text-xs">
+                    <Zap size={12} className="inline mr-1" />
+                    COMPRESSED: {((originalVideoSize - compressedVideoSize) / originalVideoSize * 100).toFixed(0)}% SAVED
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={clearVideo}
@@ -197,7 +276,7 @@ const UploadPage = () => {
                   DRAG AND DROP OR CLICK TO SELECT A VIDEO
                 </p>
                 <p className="text-xs text-brutal-gray font-bold uppercase">
-                  MP4, WEBM OR MOV (MAX. 100MB)
+                  MP4, WEBM OR MOV • VIDEOS OVER 10MB WILL BE COMPRESSED
                 </p>
               </div>
             )}
@@ -379,6 +458,21 @@ const UploadPage = () => {
           </div>
         </div>
       </form>
+      
+      {/* Video Compression Modal */}
+      <VideoCompressionModal
+        isOpen={showCompressionModal}
+        onClose={handleCompressionModalClose}
+        onConfirm={handleCompressVideo}
+        onSkip={handleSkipCompression}
+        file={videoFile}
+        compressionInfo={compressionInfo}
+        isCompressing={isCompressing}
+        compressionProgress={compressionProgress}
+        compressionComplete={compressionComplete}
+        originalSize={originalVideoSize || undefined}
+        compressedSize={compressedVideoSize || undefined}
+      />
     </div>
   );
 };
