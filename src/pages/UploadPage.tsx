@@ -104,6 +104,7 @@ const UploadPage = () => {
     
     setIsCompressing(true);
     setCompressionProgress(0);
+    setError(null);
     
     try {
       const compressedFile = await compressVideo(videoFile, (progress) => {
@@ -129,7 +130,7 @@ const UploadPage = () => {
       
     } catch (error) {
       console.error('Compression failed:', error);
-      setError('VIDEO COMPRESSION FAILED. USING ORIGINAL FILE.');
+      setError(`VIDEO COMPRESSION FAILED: ${error.message || 'UNKNOWN ERROR'}. YOU CAN CONTINUE WITH THE ORIGINAL FILE.`);
       setIsCompressing(false);
       setShowCompressionModal(false);
       setCompressionProgress(0);

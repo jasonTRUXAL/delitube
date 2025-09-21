@@ -136,7 +136,12 @@ const VideoCompressionModal: React.FC<VideoCompressionModalProps> = ({
                 </p>
                 {compressionProgress === 0 && (
                   <p className="text-xs text-warning-600 font-bold uppercase">
-                    INITIALIZING COMPRESSION ENGINE...
+                    {isCompressing ? 'INITIALIZING COMPRESSION ENGINE...' : 'READY TO COMPRESS'}
+                  </p>
+                )}
+                {compressionProgress > 0 && compressionProgress < 100 && (
+                  <p className="text-xs text-success-600 font-bold uppercase">
+                    PROCESSING VIDEO... {compressionProgress}% COMPLETE
                   </p>
                 )}
               </div>
