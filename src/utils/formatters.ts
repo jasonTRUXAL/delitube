@@ -29,7 +29,7 @@ export const formatTime = (time: number): string => {
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
-export const formatCount = (count: number): string => {
+const formatCount = (count: number): string => {
   if (count >= 1000000) {
     return `${(count / 1000000).toFixed(1)}M`;
   }

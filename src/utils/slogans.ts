@@ -1,6 +1,6 @@
 // Randomized slogan arrays and utilities
 
-export const YIKES_WORDS = [
+const YIKES_WORDS = [
   'Yikes',
   'Like',
   'Sike', 
@@ -12,7 +12,7 @@ export const YIKES_WORDS = [
   'Pike'
 ] as const;
 
-export const DESCRIBE_WORDS = [
+const DESCRIBE_WORDS = [
   'Describe',
   'Subscribe',
   'Ignite',
@@ -25,7 +25,7 @@ export const DESCRIBE_WORDS = [
   'Delight'
 ] as const;
 
-export const LEADING_WORDS = [
+const LEADING_WORDS = [
   'Leading',
   'Modern',
   'Superior',
@@ -41,12 +41,12 @@ export const LEADING_WORDS = [
 ] as const;
 
 // Get random word from array
-export const getRandomWord = <T extends readonly string[]>(array: T): T[number] => {
+const getRandomWord = <T extends readonly string[]>(array: T): T[number] => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
 // Get random number with 1% chance for #2, 99% chance for #1
-export const getRandomNumber = (): string => {
+const getRandomNumber = (): string => {
   return Math.random() < 0.01 ? '#2' : '#1';
 };
 

@@ -1,6 +1,6 @@
 // Application-wide constants
 
-export const APP_CONFIG = {
+const APP_CONFIG = {
   name: 'DeliTube',
   tagline: 'Yikes and Describe',
   description: "Deli-kun's premiere streaming and video sharing service, rated best only option annually!",
@@ -25,7 +25,7 @@ export const API_ENDPOINTS = {
   sendNotificationEmail: '/functions/v1/send-notification-email',
 } as const;
 
-export const VALIDATION = {
+const VALIDATION = {
   username: {
     minLength: 3,
     maxLength: 30,
