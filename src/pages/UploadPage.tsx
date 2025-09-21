@@ -130,7 +130,14 @@ const UploadPage = () => {
       
     } catch (error) {
       console.error('Compression failed:', error);
-      setError(`VIDEO COMPRESSION FAILED: ${error.message || 'UNKNOWN ERROR'}. YOU CAN CONTINUE WITH THE ORIGINAL FILE.`);
+      
+      // Handle specific SharedArrayBuffer errors more gracefully
+      if (error.message?.includes('SharedArrayBuffer') || error.message?.includes('Browser does not support')) {
+        setError('VIDEO COMPRESSION NOT AVAILABLE IN THIS BROWSER. CONTINUING WITH ORIGINAL FILE.');
+      } else {
+        setError(`VIDEO COMPRESSION FAILED: ${error.message || 'UNKNOWN ERROR'}. CONTINUING WITH ORIGINAL FILE.`);
+      }
+      
       setIsCompressing(false);
       setShowCompressionModal(false);
       setCompressionProgress(0);

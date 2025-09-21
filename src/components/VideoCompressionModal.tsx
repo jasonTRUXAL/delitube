@@ -200,6 +200,11 @@ const VideoCompressionModal: React.FC<VideoCompressionModalProps> = ({
               <h3 className="font-black text-brutal-black font-mono uppercase mb-4 dark:text-white">
                 COMPRESSION BENEFITS
               </h3>
+              <div className="mb-4 p-3 bg-warning-100 border-2 border-warning-500 dark:bg-warning-900">
+                <p className="text-xs text-warning-800 font-bold uppercase dark:text-warning-200">
+                  ⚠️ COMPRESSION MAY REQUIRE A PAGE RELOAD TO ENABLE BROWSER FEATURES
+                </p>
+              </div>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 bg-success-600 border-2 border-brutal-black flex items-center justify-center">

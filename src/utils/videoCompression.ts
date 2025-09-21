@@ -153,14 +153,27 @@ export const compressVideo = async (
   file: File,
   onProgress?: (progress: number) => void
 ): Promise<File> => {
-  // Check if compression is supported
-  if (!window.SharedArrayBuffer) {
-    console.warn('SharedArrayBuffer not available - compression not supported');
-    throw new Error('Video compression requires SharedArrayBuffer support. Please enable it in your browser or upload without compression.');
-  }
-  
   try {
     console.log('Starting compression process...');
+    
+    // Check if SharedArrayBuffer is available, if not try to enable it
+    if (!window.SharedArrayBuffer) {
+      console.warn('SharedArrayBuffer not available, attempting to enable...');
+      
+      // Try to reload the page with proper headers if we haven't tried yet
+      if (!sessionStorage.getItem('sharedarraybuffer-retry')) {
+        sessionStorage.setItem('sharedarraybuffer-retry', 'true');
+        window.location.reload();
+        return file; // Return original file while reloading
+      }
+      
+      // If still not available after retry, fall back gracefully
+      console.warn('SharedArrayBuffer still not available after retry, using original file');
+      throw new Error('Browser does not support video compression. Using original file.');
+    }
+    
+    // Clear the retry flag if SharedArrayBuffer is now available
+    sessionStorage.removeItem('sharedarraybuffer-retry');
     
     // Initialize FFmpeg with timeout
     let ffmpegInstance: FFmpeg;
