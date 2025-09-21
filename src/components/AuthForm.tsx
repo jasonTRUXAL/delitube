@@ -84,6 +84,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
               onChange={handleChange}
               className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
               placeholder="Your username"
+              autoCapitalize="none"
+              autoCorrect="off"
             />
           </div>
         )}
@@ -101,6 +103,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
             onChange={handleChange}
             className="input-brutal w-full px-3 py-2 sm:px-4 sm:py-3 font-mono placeholder:text-brutal-gray text-sm sm:text-base"
             placeholder="your@email.com"
+            autoCapitalize="none"
+            autoCorrect="off"
           />
         </div>
 

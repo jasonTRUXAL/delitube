@@ -306,6 +306,38 @@ const ProfilePage = () => {
                   )}
                 </div>
                 
+                {/* Drag and drop overlay */}
+                <div
+                  className="absolute inset-0 cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDragEnter={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const files = e.dataTransfer.files;
+                    if (files && files[0]) {
+                      const file = files[0];
+                      if (file.type.startsWith('image/')) {
+                        const event = { target: { files: [file] } } as any;
+                        handleAvatarChange(event);
+                      } else {
+                        setError('PLEASE DROP A VALID IMAGE FILE');
+                      }
+                    }
+                  }}
+                />
+                
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
@@ -324,7 +356,7 @@ const ProfilePage = () => {
               </div>
               
               <p className="text-xs text-brutal-gray font-bold mt-2 uppercase dark:text-gray-400">
-                SQUARE IMAGES WORK BEST
+                DRAG & DROP OR CLICK TO CHANGE • SQUARE IMAGES WORK BEST
               </p>
             </div>
             

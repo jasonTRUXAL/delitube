@@ -188,6 +188,36 @@ const EditVideoPage = () => {
               className="relative aspect-video card-brutal overflow-hidden"
               onMouseEnter={() => setIsHoveringThumbnail(true)}
               onMouseLeave={() => setIsHoveringThumbnail(false)}
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsHoveringThumbnail(true);
+              }}
+              onDragEnter={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsHoveringThumbnail(true);
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsHoveringThumbnail(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsHoveringThumbnail(false);
+                const files = e.dataTransfer.files;
+                if (files && files[0]) {
+                  const file = files[0];
+                  if (file.type.startsWith('image/')) {
+                    const event = { target: { files: [file] } } as any;
+                    handleThumbnailChange(event);
+                  } else {
+                    toast.error('PLEASE DROP A VALID IMAGE FILE');
+                  }
+                }
+              }}
             >
               <img
                 src={thumbnailPreview || currentVideo.thumbnail_url}
@@ -207,7 +237,7 @@ const EditVideoPage = () => {
                     <Upload size={24} className="text-brutal-black" />
                   </div>
                   <p className="text-white font-black font-mono uppercase text-sm mb-2">
-                    CLICK TO UPLOAD NEW THUMBNAIL
+                    DRAG & DROP OR CLICK TO UPLOAD NEW THUMBNAIL
                   </p>
                   {videoDimensions && (
                     <p className="text-white/80 font-bold uppercase text-xs">

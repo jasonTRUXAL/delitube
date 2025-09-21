@@ -162,6 +162,32 @@ const UploadPage = () => {
             ) : (
               <div
                 onClick={() => videoInputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const files = e.dataTransfer.files;
+                  if (files && files[0]) {
+                    const file = files[0];
+                    if (file.type.startsWith('video/')) {
+                      const event = { target: { files: [file] } } as any;
+                      handleVideoChange(event);
+                    } else {
+                      setError('PLEASE DROP A VALID VIDEO FILE');
+                    }
+                  }
+                }}
                 className="border-4 border-dashed border-brutal-black bg-white p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-primary-50 transition-colors aspect-video brutal-hover dark:border-brutal-dark-brown dark:bg-brutal-cream dark:hover:bg-primary-100"
               >
                 <div className="w-16 h-16 bg-primary-400 border-3 border-brutal-black flex items-center justify-center mb-4 dark:border-brutal-dark-brown">
@@ -209,6 +235,32 @@ const UploadPage = () => {
             ) : (
               <div
                 onClick={() => thumbnailInputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const files = e.dataTransfer.files;
+                  if (files && files[0]) {
+                    const file = files[0];
+                    if (file.type.startsWith('image/')) {
+                      const event = { target: { files: [file] } } as any;
+                      handleThumbnailChange(event);
+                    } else {
+                      setError('PLEASE DROP A VALID IMAGE FILE FOR THE THUMBNAIL');
+                    }
+                  }
+                }}
                 className="border-4 border-dashed border-brutal-black bg-white p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-primary-50 transition-colors aspect-video brutal-hover dark:border-brutal-dark-brown dark:bg-brutal-cream dark:hover:bg-primary-100"
               >
                 <div className="w-16 h-16 bg-secondary-600 border-3 border-brutal-black flex items-center justify-center mb-4 dark:border-brutal-dark-brown">

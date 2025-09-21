@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .insert({
             id: data.user.id,
             username,
-            email,
+            email: email, // Preserve original email case
             avatar_url: null,
             is_admin: false,
           });
@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('email')
-        .eq('email', email.trim())
+        .ilike('email', email.trim()) // Case-insensitive search
         .maybeSingle();
       
       if (profileError) {
@@ -184,7 +184,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { error } = await supabase
         .from('profiles')
         .update(updates)
-        .eq('id', user.id);
+          email: email, // Preserve original email case
 
       if (error) throw error;
       
