@@ -6,16 +6,8 @@ export const APP_CONFIG = {
   description: "Deli-kun's premiere streaming and video sharing service, rated best only option annually!",
   maxHashtags: 3,
   maxFileSize: {
-    video: 1024 * 1024 * 1024, // 1GB for testing compression
+    video: 100 * 1024 * 1024, // 100MB
     image: 5 * 1024 * 1024,   // 5MB
-  },
-  compression: {
-    threshold: 50 * 1024 * 1024, // 50MB - compress files larger than this
-    targetQuality: 'high', // high, medium, low
-    maxResolution: {
-      width: 1920,
-      height: 1080
-    }
   },
   pagination: {
     defaultPageSize: 12,
