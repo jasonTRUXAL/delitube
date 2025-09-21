@@ -184,7 +184,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { error } = await supabase
         .from('profiles')
         .update(updates)
-          email: email, // Preserve original email case
+        .eq('id', user.id);
 
       if (error) throw error;
       
