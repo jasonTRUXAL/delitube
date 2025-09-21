@@ -56,8 +56,8 @@ const UploadPage = () => {
     }
     
     // Validate file size (limit to 100MB for this example)
-    if (file.size > 100 * 1024 * 1024) {
-      setError('VIDEO FILE IS TOO LARGE. PLEASE SELECT A FILE UNDER 100MB');
+    if (file.size > 1024 * 1024 * 1024) {
+      setError('VIDEO FILE IS TOO LARGE. PLEASE SELECT A FILE UNDER 1GB');
       return;
     }
     
@@ -100,13 +100,18 @@ const UploadPage = () => {
   const handleCompressVideo = async () => {
     if (!videoFile) return;
     
+    console.log('Starting compression for file:', videoFile.name, 'Size:', (videoFile.size / 1024 / 1024).toFixed(2) + 'MB');
+    
     setIsCompressing(true);
     setCompressionProgress(0);
     
     try {
       const compressedFile = await compressVideo(videoFile, (progress) => {
+        console.log('Compression progress update:', progress + '%');
         setCompressionProgress(progress);
       });
+      
+      console.log('Compression completed. Original:', (videoFile.size / 1024 / 1024).toFixed(2) + 'MB', 'Compressed:', (compressedFile.size / 1024 / 1024).toFixed(2) + 'MB');
       
       // Update video file with compressed version
       setVideoFile(compressedFile);
@@ -127,6 +132,7 @@ const UploadPage = () => {
       setError('VIDEO COMPRESSION FAILED. USING ORIGINAL FILE.');
       setIsCompressing(false);
       setShowCompressionModal(false);
+      setCompressionProgress(0);
     }
   };
   
@@ -276,7 +282,7 @@ const UploadPage = () => {
                   DRAG AND DROP OR CLICK TO SELECT A VIDEO
                 </p>
                 <p className="text-xs text-brutal-gray font-bold uppercase">
-                  MP4, WEBM OR MOV • VIDEOS OVER 10MB WILL BE COMPRESSED
+                  MP4, WEBM OR MOV • VIDEOS OVER 50MB WILL BE COMPRESSED
                 </p>
               </div>
             )}

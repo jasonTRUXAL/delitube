@@ -11,13 +11,20 @@ export const initializeFFmpeg = async (): Promise<FFmpeg> => {
   
   ffmpeg = new FFmpeg();
   
-  // Load FFmpeg core
+  // Load FFmpeg core with better error handling
   const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
   
-  await ffmpeg.load({
-    coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-    wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-  });
+  try {
+    console.log('Loading FFmpeg core...');
+    await ffmpeg.load({
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+      wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+    });
+    console.log('FFmpeg loaded successfully');
+  } catch (error) {
+    console.error('Failed to load FFmpeg:', error);
+    throw new Error('Failed to initialize video compression. Please try uploading without compression.');
+  }
   
   return ffmpeg;
 };
@@ -112,25 +119,31 @@ export const compressVideo = async (
   onProgress?: (progress: number) => void
 ): Promise<File> => {
   try {
+    console.log('Starting compression process...');
+    
     // Initialize FFmpeg
     const ffmpegInstance = await initializeFFmpeg();
+    console.log('FFmpeg initialized');
     
     // Get video metadata
     const metadata = await getVideoMetadata(file);
+    console.log('Video metadata:', metadata);
+    
     const settings = getCompressionSettings(
       file.size, 
       metadata.width, 
       metadata.height, 
       metadata.duration
     );
+    console.log('Compression settings:', settings);
     
     // Calculate if compression is needed
     const estimatedCompressedSize = file.size * 0.3; // Rough estimate
-    const minCompressionThreshold = 10 * 1024 * 1024; // 10MB
+    const minCompressionThreshold = 50 * 1024 * 1024; // 50MB - increased threshold
     
     // Skip compression for very small files
     if (file.size < minCompressionThreshold) {
-      console.log('File too small for compression, using original');
+      console.log(`File size ${(file.size / 1024 / 1024).toFixed(2)}MB is below ${minCompressionThreshold / 1024 / 1024}MB threshold, using original`);
       return file;
     }
     
@@ -143,8 +156,11 @@ export const compressVideo = async (
     
     // Set up progress tracking
     if (onProgress) {
+      console.log('Setting up progress tracking...');
       ffmpegInstance.on('progress', ({ progress }) => {
-        onProgress(Math.round(progress * 100));
+        const progressPercent = Math.round(progress * 100);
+        console.log(`Compression progress: ${progressPercent}%`);
+        onProgress(progressPercent);
       });
     }
     
@@ -152,7 +168,9 @@ export const compressVideo = async (
     const inputFileName = 'input.mp4';
     const outputFileName = 'output.mp4';
     
+    console.log('Writing input file to FFmpeg filesystem...');
     await ffmpegInstance.writeFile(inputFileName, await fetchFile(file));
+    console.log('Input file written successfully');
     
     // Build FFmpeg command for high-quality compression
     const ffmpegArgs = [
@@ -163,6 +181,7 @@ export const compressVideo = async (
       '-c:a', 'aac', // Audio codec
       '-b:a', '128k', // Audio bitrate
       '-movflags', '+faststart', // Optimize for web streaming
+      '-progress', 'pipe:1', // Enable progress reporting
     ];
     
     // Add resolution scaling if needed
@@ -179,15 +198,22 @@ export const compressVideo = async (
     
     ffmpegArgs.push(outputFileName);
     
+    console.log('FFmpeg command:', ffmpegArgs.join(' '));
+    
     // Execute compression
+    console.log('Starting FFmpeg execution...');
     await ffmpegInstance.exec(ffmpegArgs);
+    console.log('FFmpeg execution completed');
     
     // Read compressed file
+    console.log('Reading compressed file...');
     const compressedData = await ffmpegInstance.readFile(outputFileName);
+    console.log('Compressed file read successfully');
     
     // Clean up
     await ffmpegInstance.deleteFile(inputFileName);
     await ffmpegInstance.deleteFile(outputFileName);
+    console.log('Cleanup completed');
     
     // Create new File object
     const compressedBlob = new Blob([compressedData], { type: 'video/mp4' });
@@ -211,6 +237,9 @@ export const compressVideo = async (
     console.error('Video compression failed:', error);
     // Return original file if compression fails
     console.log('Falling back to original file due to compression error');
+    if (onProgress) {
+      onProgress(0); // Reset progress on error
+    }
     return file;
   }
 };
@@ -219,8 +248,8 @@ export const compressVideo = async (
 export const shouldCompressVideo = (file: File): boolean => {
   const fileSizeMB = file.size / (1024 * 1024);
   
-  // Compress files larger than 10MB
-  return fileSizeMB > 10;
+  // Compress files larger than 50MB
+  return fileSizeMB > 50;
 };
 
 // Get compression info for UI display

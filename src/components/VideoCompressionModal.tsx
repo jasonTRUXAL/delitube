@@ -130,9 +130,16 @@ const VideoCompressionModal: React.FC<VideoCompressionModalProps> = ({
                 ></div>
               </div>
               
-              <p className="text-xs text-brutal-gray font-bold uppercase mt-2 dark:text-gray-400">
-                PLEASE WAIT WHILE WE OPTIMIZE YOUR VIDEO...
-              </p>
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-brutal-gray font-bold uppercase dark:text-gray-400">
+                  PLEASE WAIT WHILE WE OPTIMIZE YOUR VIDEO...
+                </p>
+                {compressionProgress === 0 && (
+                  <p className="text-xs text-warning-600 font-bold uppercase">
+                    INITIALIZING COMPRESSION ENGINE...
+                  </p>
+                )}
+              </div>
             </div>
           )}
 
